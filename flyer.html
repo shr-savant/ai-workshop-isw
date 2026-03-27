@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workshop Flyer — LEAP Collective 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #eef0f5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .flyer {
+    width: 100%;
+    max-width: 640px;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  /* ── TOP BAND ── */
+  .top-band {
+    background: #0f172a;
+    padding: 2rem 2.25rem 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .top-band::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563eb 0%, #0891b2 50%, #059669 100%);
+  }
+
+  .org-line {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 1.25rem;
+  }
+
+  .event-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 1.25rem;
+  }
+
+  .event-badge .live-dot {
+    width: 6px; height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+  }
+
+  .flyer-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.6rem, 5vw, 2.1rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .flyer-title .accent { color: #38bdf8; }
+
+  .flyer-sub {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 420px;
+    margin-bottom: 1.75rem;
+  }
+
+  .meta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #cbd5e1;
+  }
+
+  .chip svg { opacity: 0.6; }
+
+  /* ── BODY ── */
+  .flyer-body { padding: 1.75rem 2.25rem; }
+
+  /* Pillars */
+  .pillars-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.75rem;
+  }
+
+  @media (max-width: 480px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+
+  .pillar {
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+
+  .p-l { background: #eff6ff; }
+  .p-e { background: #ecfdf5; }
+  .p-a { background: #fefce8; }
+  .p-p { background: #fdf4ff; }
+
+  .pillar-letter {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .l-l { color: #1d4ed8; }
+  .l-e { color: #059669; }
+  .l-a { color: #ca8a04; }
+  .l-p { color: #9333ea; }
+
+  .pillar-word {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .w-l { color: #3b82f6; }
+  .w-e { color: #10b981; }
+  .w-a { color: #eab308; }
+  .w-p { color: #a855f7; }
+
+  /* What you'll learn */
+  .learn-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+  }
+
+  .learn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1.75rem;
+  }
+
+  @media (max-width: 440px) { .learn-grid { grid-template-columns: 1fr; } }
+
+  .learn-item {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .learn-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #2563eb;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .learn-text { font-size: 12.5px; color: #374151; line-height: 1.5; }
+
+  /* Principle */
+  .principle {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .principle-ratio {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #38bdf8;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .principle-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+
+  .principle-text {}
+  .principle-title { font-size: 13px; font-weight: 600; color: #f1f5f9; margin-bottom: 2px; }
+  .principle-sub { font-size: 12px; color: #64748b; line-height: 1.5; }
+
+  /* Speakers */
+  .speakers-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+  }
+
+  .speakers-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 440px) { .speakers-row { grid-template-columns: 1fr; } }
+
+  .speaker-card {
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid;
+    display: flex;
+    gap: 11px;
+    align-items: flex-start;
+  }
+
+  .sc-rik { background: #eff6ff; border-color: #bfdbfe; }
+  .sc-sri { background: #ecfeff; border-color: #a5f3fc; }
+
+  .spk-av {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .av-r { background: #2563eb; }
+  .av-s { background: #0891b2; }
+
+  .spk-info {}
+  .spk-n { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 1px; }
+  .spk-n-r { color: #1d4ed8; }
+  .spk-n-s { color: #0e7490; }
+  .spk-r { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+  /* CTA */
+  .cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn {
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .cta-link {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  .cta-link a { color: #2563eb; text-decoration: none; font-weight: 500; }
+  .cta-link a:hover { text-decoration: underline; }
+
+  /* Footer strip */
+  .flyer-footer {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 0.9rem 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-org {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .footer-tag {
+    font-size: 11px;
+    color: #94a3b8;
+  }
+
+  .footer-tag strong {
+    color: #475569;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer">
+
+  <!-- TOP BAND -->
+  <div class="top-band">
+    <div class="org-line">India Society of Worcester · LEAP Collective 2026</div>
+    <div class="event-badge">
+      <span class="live-dot"></span>
+      Live Workshop · May 2, 2026
+    </div>
+    <h1 class="flyer-title">Making AI Work<br><span class="accent">For You</span></h1>
+    <p class="flyer-sub">A practical, hands-on workshop on using AI to grow your career and your business — no technical background required.</p>
+    <div class="meta-chips">
+      <div class="chip">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        60 minutes
+      </div>
+      <div class="chip">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        India Center, Shrewsbury MA
+      </div>
+      <div class="chip">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        9 AM – 5 PM Conference
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="flyer-body">
+
+    <!-- LEAP Pillars -->
+    <div class="pillars-label">The LEAP Pillars</div>
+    <div class="pillars">
+      <div class="pillar p-l">
+        <div class="pillar-letter l-l">L</div>
+        <div class="pillar-word w-l">Lead</div>
+      </div>
+      <div class="pillar p-e">
+        <div class="pillar-letter l-e">E</div>
+        <div class="pillar-word w-e">Elevate</div>
+      </div>
+      <div class="pillar p-a">
+        <div class="pillar-letter l-a">A</div>
+        <div class="pillar-word w-a">Advance</div>
+      </div>
+      <div class="pillar p-p">
+        <div class="pillar-letter l-p">P</div>
+        <div class="pillar-word w-p">Progress</div>
+      </div>
+    </div>
+
+    <!-- What you'll learn -->
+    <div class="learn-label">What You'll Walk Away With</div>
+    <div class="learn-grid">
+      <div class="learn-item">
+        <div class="learn-dot"></div>
+        <div class="learn-text">AI tools you can use today — free, no coding needed</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-dot" style="background:#0891b2"></div>
+        <div class="learn-text">Live hands-on practice with real prompts</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-dot" style="background:#059669"></div>
+        <div class="learn-text">Career case studies: resume, job search, productivity</div>
+      </div>
+      <div class="learn-item">
+        <div class="learn-dot" style="background:#7c3aed"></div>
+        <div class="learn-text">Business use cases: marketing, automation, growth</div>
+      </div>
+    </div>
+
+    <!-- 85/15 Principle -->
+    <div class="principle">
+      <div class="principle-ratio">85 / 15</div>
+      <div class="principle-divider"></div>
+      <div class="principle-text">
+        <div class="principle-title">The principle powering this session</div>
+        <div class="principle-sub">AI handles 85% of the work. Your judgment, context, and expertise are the irreplaceable 15%.</div>
+      </div>
+    </div>
+
+    <!-- Speakers -->
+    <div class="speakers-label">Your Co-Speakers</div>
+    <div class="speakers-row">
+      <div class="speaker-card sc-rik">
+        <div class="spk-av av-r">RB</div>
+        <div class="spk-info">
+          <div class="spk-n spk-n-r">Rik Banerjee</div>
+          <div class="spk-r">AI Builder &amp; Co-Speaker<br>Built EzyUpload.com, Bazaar Protocol, DCF Platform</div>
+        </div>
+      </div>
+      <div class="speaker-card sc-sri">
+        <div class="spk-av av-s">SS</div>
+        <div class="spk-info">
+          <div class="spk-n spk-n-s">Srikanth Savant</div>
+          <div class="spk-r">AI Builder &amp; Co-Speaker<br>AI in business &amp; entrepreneurship</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+      <a href="https://iswonline.org/event-6599047" class="cta-btn">Register Now →</a>
+      <div class="cta-link">Details at <a href="https://iswonline.org/event-6599047">iswonline.org</a> · Spots are limited</div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER STRIP -->
+  <div class="flyer-footer">
+    <span class="footer-org">LEAP Collective 2026</span>
+    <span class="footer-tag">Part of a <strong>full-day professional conference</strong> · May 2, 2026</span>
+  </div>
+
+</div>
+
+</body>
+</html>

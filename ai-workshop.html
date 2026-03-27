@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workshop — Community Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f0e8;
+    --accent: #e84a1a;
+    --accent2: #1a6ee8;
+    --gold: #c9a84c;
+    --muted: #7a7468;
+    --card: #fff;
+    --border: #ddd8ce;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: 'AI';
+    position: absolute;
+    right: -1rem;
+    top: -1rem;
+    font-size: 12rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 700px;
+  }
+  header h1 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--gold);
+  }
+  .header-sub {
+    margin-top: 1rem;
+    color: rgba(245,240,232,0.6);
+    font-size: 0.9rem;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+  .speaker-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.8);
+  }
+  .speaker-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── NAV TABS ── */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Syne', sans-serif;
+  }
+  .tab:hover { color: rgba(245,240,232,0.8); }
+  .tab.active { color: var(--paper); border-bottom-color: var(--accent); }
+
+  /* ── MAIN ── */
+  main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── SECTION HEADINGS ── */
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .section-heading h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+  .section-heading .tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .card p {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: #444;
+  }
+
+  /* ── AGENDA ── */
+  .agenda-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .agenda-item:last-child { border-bottom: none; }
+  .agenda-time {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    padding-top: 0.1rem;
+  }
+  .agenda-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+  }
+  .agenda-desc {
+    font-size: 0.83rem;
+    color: #555;
+    line-height: 1.55;
+  }
+  .agenda-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    background: var(--accent);
+    color: white;
+  }
+  .agenda-badge.blue { background: var(--accent2); }
+  .agenda-badge.gold { background: var(--gold); color: var(--ink); }
+
+  /* ── TOOLS GRID ── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .tool-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default;
+  }
+  .tool-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+  .tool-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .tool-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 0.3rem;
+  }
+  .tool-use {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .tool-tag {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* ── CASE STUDIES ── */
+  .case {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .case::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--accent);
+  }
+  .case.blue::before { background: var(--accent2); }
+  .case.gold::before { background: var(--gold); }
+  .case-meta {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .case h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .case p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: #444;
+  }
+  .case .result {
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    background: var(--paper);
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* ── QA TOOL ── */
+  .qa-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .qa-header {
+    padding: 1.2rem 1.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .qa-header h3 {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .qa-header span {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .qa-messages {
+    height: 320px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .msg {
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+  .msg.user {
+    background: var(--ink);
+    color: var(--paper);
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+  .msg.ai {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+  .msg.ai .msg-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .qa-input-row {
+    display: flex;
+    border-top: 1px solid var(--border);
+  }
+  .qa-input {
+    flex: 1;
+    padding: 1rem 1.2rem;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    background: var(--card);
+    outline: none;
+    color: var(--ink);
+  }
+  .qa-btn {
+    padding: 0 1.5rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .qa-btn:hover { background: #c93d10; }
+  .qa-btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .quick-qs {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--paper);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .quick-q {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    background: var(--card);
+    cursor: pointer;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+  }
+  .quick-q:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── ICEBREAKER ── */
+  .icebreaker-box {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 1.25rem;
+  }
+  .icebreaker-box h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--gold);
+  }
+  .poll-option {
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: all 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .poll-option:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); }
+  .poll-option.selected { background: rgba(232,74,26,0.2); border-color: var(--accent); }
+  .poll-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    margin-top: 0.3rem;
+    overflow: hidden;
+  }
+  .poll-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+    width: 0%;
+  }
+  .poll-pct {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── SPEAKING NOTES ── */
+  .note-block {
+    background: #fffbf0;
+    border: 1px solid #e8d89a;
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .note-block .note-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+  .note-block p {
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: #4a3e10;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  /* Scrollbar */
+  .qa-messages::-webkit-scrollbar { width: 4px; }
+  .qa-messages::-webkit-scrollbar-track { background: transparent; }
+  .qa-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .typing-dots span {
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: var(--muted);
+    border-radius: 50%;
+    animation: dot-bounce 1.2s infinite;
+    margin: 0 1px;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dot-bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Community AI Workshop</div>
+  <h1>Making AI Work <em>For You</em></h1>
+  <p class="header-sub">Practical tools, real case studies, and honest conversations — beyond the hype.</p>
+  <div class="speaker-badge">
+    <div class="speaker-dot"></div>
+    Speaker: Rik · Product Manager & AI Builder
+  </div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showTab('agenda')">Agenda</button>
+  <button class="tab" onclick="showTab('tools')">Tools Demo</button>
+  <button class="tab" onclick="showTab('cases')">Case Studies</button>
+  <button class="tab" onclick="showTab('live-qa')">Live Q&A</button>
+  <button class="tab" onclick="showTab('icebreaker')">Icebreaker</button>
+  <button class="tab" onclick="showTab('notes')">Speaker Notes</button>
+</nav>
+
+<main>
+
+  <!-- AGENDA -->
+  <div id="agenda" class="section active">
+    <div class="section-heading">
+      <h2>Workshop Agenda</h2>
+      <span class="tag">90 min</span>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Format</div>
+      <p>This workshop blends both tracks — <strong>Career Growth</strong> and <strong>Business & Entrepreneurship</strong> — because most people in a community setting wear both hats. It's structured to be interactive throughout, not a lecture.</p>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">0:00 – 0:10</div>
+      <div>
+        <div class="agenda-title">Welcome & Icebreaker Poll</div>
+        <div class="agenda-desc">Audience shares their current AI usage — from "I've never used it" to "I use it daily." Sets the room's level and makes people feel seen regardless of experience.</div>
+        <span class="agenda-badge gold">Interactive</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">0:10 – 0:20</div>
+      <div>
+        <div class="agenda-title">The Real AI Landscape (No Fluff)</div>
+        <div class="agenda-desc">What AI can and can't do today. Debunking myths. Rik's personal journey building AI tools — from a stock analysis engine to an agentic commerce protocol.</div>
+        <span class="agenda-badge">Talk</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">0:20 – 0:40</div>
+      <div>
+        <div class="agenda-title">AI for Your Career — Live Demo</div>
+        <div class="agenda-desc">Live walkthrough of using AI for emails, presentations, research, and productivity. Attendees try it on their own phones simultaneously. Compare outputs.</div>
+        <span class="agenda-badge">Demo + Practice</span>
+        <span class="agenda-badge blue">Hands-On</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">0:40 – 0:60</div>
+      <div>
+        <div class="agenda-title">AI for Business — 3 Case Studies</div>
+        <div class="agenda-desc">Real examples: a solo e-commerce seller using AI photography, a small business owner automating customer responses, and a job seeker rewriting their resume with AI. Attendees vote on which resonates most.</div>
+        <span class="agenda-badge gold">Case Studies</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">1:00 – 1:20</div>
+      <div>
+        <div class="agenda-title">Beyond ChatGPT — The Bigger Picture</div>
+        <div class="agenda-desc">Claude, Gemini, Perplexity, Midjourney, and specialized tools. When to use what. The "85% AI / 15% you" principle. How AI amplifies domain expertise rather than replacing it.</div>
+        <span class="agenda-badge">Talk + Poll</span>
+      </div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="agenda-time">1:20 – 1:30</div>
+      <div>
+        <div class="agenda-title">Open Q&A + Takeaways</div>
+        <div class="agenda-desc">Live questions. Each attendee leaves with one concrete AI habit to start this week. Rik shares his personal "starter kit" resource list.</div>
+        <span class="agenda-badge blue">Q&A</span>
+        <span class="agenda-badge gold">Takeaways</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS DEMO -->
+  <div id="tools" class="section">
+    <div class="section-heading">
+      <h2>Tools to Demo Live</h2>
+      <span class="tag">Beyond ChatGPT</span>
+    </div>
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="card-label">Strategy</div>
+      <p>Don't just show tools — let attendees try them simultaneously on their phones. Pick 2–3 max for the live demo. Use the others as a handout they can explore after.</p>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-icon">✍️</div>
+        <div class="tool-name">Claude</div>
+        <div class="tool-use">Long reasoning, nuanced writing, analysis. Better than GPT for careful thought.</div>
+        <span class="tool-tag">Writing & Analysis</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🔍</div>
+        <div class="tool-name">Perplexity</div>
+        <div class="tool-use">Real-time research with citations. Like Google but it reads the pages for you.</div>
+        <span class="tool-tag">Research</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🖼️</div>
+        <div class="tool-name">Canva AI</div>
+        <div class="tool-use">Design decks, social posts, flyers. No design skills needed.</div>
+        <span class="tool-tag">Design</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Notion AI</div>
+        <div class="tool-use">Summarize meetings, draft plans, organize notes with AI built in.</div>
+        <span class="tool-tag">Productivity</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🎙️</div>
+        <div class="tool-name">Otter.ai</div>
+        <div class="tool-use">Records and transcribes meetings. Auto-generates action items.</div>
+        <span class="tool-tag">Meetings</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">📧</div>
+        <div class="tool-name">Gmail AI</div>
+        <div class="tool-use">Draft replies, summarize long email threads. Already in your inbox.</div>
+        <span class="tool-tag">Email</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🛒</div>
+        <div class="tool-name">RetailSnap AI</div>
+        <div class="tool-use">Studio-quality product photos for Shopify & Etsy sellers — no photographer needed.</div>
+        <span class="tool-tag">E-commerce</span>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-name">Zapier AI</div>
+        <div class="tool-use">Automate repetitive tasks between apps. "When X happens, do Y" — no code.</div>
+        <span class="tool-tag">Automation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE STUDIES -->
+  <div id="cases" class="section">
+    <div class="section-heading">
+      <h2>Case Studies</h2>
+      <span class="tag">Real Examples</span>
+    </div>
+
+    <div class="case">
+      <div class="case-meta">Case 01 · E-Commerce</div>
+      <h3>Solo Etsy Seller Doubles Click-Through Rate</h3>
+      <p>A maker selling handmade jewelry was spending weekends taking product photos with inconsistent lighting. She switched to an AI product photography tool — uploading a photo of the item against a plain background, and getting back a studio-quality image in under a minute. Her click-through rate on Etsy went from 2.1% to 4.4% in the first month.</p>
+      <div class="result">💡 Takeaway: AI removes the cost barrier to looking professional.</div>
+    </div>
+
+    <div class="case blue">
+      <div class="case-meta">Case 02 · Career</div>
+      <h3>Job Seeker Lands Interview After 3 Months of Silence</h3>
+      <p>A mid-career professional had been applying for 3 months with no callbacks. She pasted her resume and the job description into Claude and asked: "What's missing?" The AI identified that her resume used the wrong keywords for ATS systems, and her bullet points described duties rather than outcomes. She rewrote it in an afternoon. She got 2 interview calls within the first week.</p>
+      <div class="result">💡 Takeaway: AI gives you a brilliant friend who will be brutally honest about your resume.</div>
+    </div>
+
+    <div class="case gold">
+      <div class="case-meta">Case 03 · Small Business</div>
+      <h3>Restaurant Owner Reclaims 5 Hours a Week</h3>
+      <p>A local restaurant owner was spending hours each week responding to the same customer questions on Instagram DMs: "What are your hours?", "Do you do catering?", "Are you halal?" She set up a simple AI chatbot using a no-code tool. It now handles 80% of DM inquiries automatically, and she only steps in for complex requests. She now uses that saved time to work on a catering menu expansion.</p>
+      <div class="result">💡 Takeaway: Small businesses can now afford tools that used to cost enterprise money.</div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="card">
+      <div class="card-label">Rik's Own Story</div>
+      <h3>From PM to AI Builder — the 85/15 Principle</h3>
+      <p>Rik built a full stock analysis platform with a DCF valuation engine — not by becoming a software engineer overnight, but by using AI to handle 85% of the code while applying his own domain expertise in the critical 15%: understanding which financial model was wrong and why. The same principle applies to anyone in this room. Your expertise is the moat. AI is the accelerant.</p>
+    </div>
+  </div>
+
+  <!-- LIVE Q&A -->
+  <div id="live-qa" class="section">
+    <div class="section-heading">
+      <h2>Live Q&A Practice</h2>
+      <span class="tag">AI-Powered</span>
+    </div>
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="card-label">How to use this</div>
+      <p>Practice answering tough audience questions — or use this live during the workshop so attendees can type in anonymous questions that you answer with AI support.</p>
+    </div>
+    <div class="qa-container">
+      <div class="qa-header">
+        <h3>Ask Anything About AI</h3>
+        <span>Powered by Claude</span>
+      </div>
+      <div class="qa-messages" id="qaMessages">
+        <div class="msg ai">
+          <div class="msg-label">Workshop AI</div>
+          Ask me anything about AI — for your career, your business, or just to understand what's real and what's hype.
+        </div>
+      </div>
+      <div class="quick-qs">
+        <button class="quick-q" onclick="askQuestion('Will AI take my job?')">Will AI take my job?</button>
+        <button class="quick-q" onclick="askQuestion('Where do I start with AI as a non-techie?')">Where do I start?</button>
+        <button class="quick-q" onclick="askQuestion('How do I use AI for my small business?')">AI for my business</button>
+        <button class="quick-q" onclick="askQuestion('Is my data safe with AI tools?')">Is my data safe?</button>
+        <button class="quick-q" onclick="askQuestion('What is the difference between ChatGPT and Claude?')">ChatGPT vs Claude</button>
+      </div>
+      <div class="qa-input-row">
+        <input class="qa-input" id="qaInput" placeholder="Type your question…" onkeydown="if(event.key==='Enter') sendQA()" />
+        <button class="qa-btn" id="qaBtn" onclick="sendQA()">Ask →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICEBREAKER -->
+  <div id="icebreaker" class="section">
+    <div class="section-heading">
+      <h2>Opening Icebreaker</h2>
+      <span class="tag">Audience Poll</span>
+    </div>
+    <div class="icebreaker-box">
+      <h3>📊 Where are you right now with AI?</h3>
+      <p style="font-size:0.83rem; color:rgba(245,240,232,0.6); margin-bottom:1.2rem">Tap to vote — no judgment, just honest answers.</p>
+
+      <div class="poll-option" onclick="vote(this, 0)" data-idx="0">
+        <span>🙈 I've barely used it</span>
+        <span class="poll-pct" id="pct0">0%</span>
+      </div>
+      <div class="poll-bar"><div class="poll-fill" id="bar0"></div></div>
+
+      <div class="poll-option" onclick="vote(this, 1)" data-idx="1" style="margin-top:0.6rem">
+        <span>🤔 I've tried ChatGPT a few times</span>
+        <span class="poll-pct" id="pct1">0%</span>
+      </div>
+      <div class="poll-bar"><div class="poll-fill" id="bar1"></div></div>
+
+      <div class="poll-option" onclick="vote(this, 2)" data-idx="2" style="margin-top:0.6rem">
+        <span>🧪 I use it occasionally for work</span>
+        <span class="poll-pct" id="pct2">0%</span>
+      </div>
+      <div class="poll-bar"><div class="poll-fill" id="bar2"></div></div>
+
+      <div class="poll-option" onclick="vote(this, 3)" data-idx="3" style="margin-top:0.6rem">
+        <span>⚡ It's part of my daily workflow</span>
+        <span class="poll-pct" id="pct3">0%</span>
+      </div>
+      <div class="poll-bar"><div class="poll-fill" id="bar3"></div></div>
+
+      <p style="font-size:0.75rem; color:rgba(245,240,232,0.35); margin-top:1.2rem; font-family:'JetBrains Mono',monospace" id="voteCount">0 votes</p>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Second Poll (mid-session)</div>
+      <h3>What would matter most to you?</h3>
+      <p style="font-size:0.85rem; margin-top:0.4rem; color:#555">Ask this halfway through: "Now that you've seen a few demos — what's the #1 use case you want to explore more?" Let the audience drive the second half.</p>
+    </div>
+  </div>
+
+  <!-- SPEAKER NOTES -->
+  <div id="notes" class="section">
+    <div class="section-heading">
+      <h2>Speaker Notes</h2>
+      <span class="tag">For Rik's Eyes</span>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">Opening hook</div>
+      <p>Don't start with slides. Open with: "Put your hand up if you've used AI in the last week." Then: "Keep it up if you used it for something work-related." Watch hands drop. That gap is exactly why we're here today.</p>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">Your credibility anchor</div>
+      <p>Mention RetailSnap AI and the stock analysis platform early — not to show off, but to establish that you've built things with AI, not just talked about it. "I'm not a researcher. I'm a product person who builds." That lands differently in a community room.</p>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">The "85/15" framing</div>
+      <p>This is your signature concept. Drive it home: AI does 85% of the work. But the 15% — knowing what good looks like, asking the right question, catching the hallucination — that's irreplaceable human expertise. You're not teaching them to be replaced. You're teaching them to use a superpower.</p>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">Handling the fear question</div>
+      <p>Someone will ask about jobs. Don't dismiss it. Acknowledge it: "It's a real and valid concern." Then reframe: "History shows technology eliminates tasks, not whole professions. The typist disappeared; the executive assistant evolved. The question is — do you want to be on the side that adapts, or the side that waits?" Then pivot to the career case study.</p>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">The live demo trick</div>
+      <p>Give the audience a task to do in parallel: "Take out your phone. Go to claude.ai. Type: 'I work in [their job]. What are 5 ways AI could save me time this week?' Don't overthink it. Just send it." While they type, you type the same thing on screen. Compare. It makes it real, not theoretical.</p>
+    </div>
+
+    <div class="note-block">
+      <div class="note-label">Closing line</div>
+      <p>"You don't need to become an engineer. You need to become someone who knows how to ask good questions. That's it. AI is the most powerful intern you've ever had — it just needs a good manager." Then hand out the one-page starter kit.</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Poll
+  const votes = [0,0,0,0];
+  let userVote = -1;
+  function vote(el, idx) {
+    if (userVote >= 0) {
+      document.querySelectorAll('.poll-option')[userVote].classList.remove('selected');
+      votes[userVote]--;
+    }
+    userVote = idx;
+    votes[idx]++;
+    el.classList.add('selected');
+    const total = votes.reduce((a,b)=>a+b,0);
+    votes.forEach((v,i) => {
+      const pct = total ? Math.round(v/total*100) : 0;
+      document.getElementById('pct'+i).textContent = pct+'%';
+      document.getElementById('bar'+i).style.width = pct+'%';
+    });
+    document.getElementById('voteCount').textContent = total + (total===1?' vote':' votes');
+  }
+
+  // Q&A
+  async function sendQA() {
+    const input = document.getElementById('qaInput');
+    const btn = document.getElementById('qaBtn');
+    const q = input.value.trim();
+    if (!q) return;
+
+    const messages = document.getElementById('qaMessages');
+
+    // user bubble
+    const userMsg = document.createElement('div');
+    userMsg.className = 'msg user';
+    userMsg.textContent = q;
+    messages.appendChild(userMsg);
+    input.value = '';
+    btn.disabled = true;
+    messages.scrollTop = messages.scrollHeight;
+
+    // typing indicator
+    const typing = document.createElement('div');
+    typing.className = 'msg ai';
+    typing.innerHTML = '<div class="msg-label">Workshop AI</div><div class="typing-dots"><span></span><span></span><span></span></div>';
+    messages.appendChild(typing);
+    messages.scrollTop = messages.scrollHeight;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: `You are an expert AI educator speaking at a community workshop. Your answers are warm, jargon-free, honest, and practical. Keep responses to 3–5 sentences unless the question demands more detail. Use everyday analogies. Never hype AI beyond what it can actually do today. The speaker is Rik, a Product Manager who has built real AI tools including an e-commerce photography tool and an agentic commerce protocol.`,
+          messages: [{ role: 'user', content: q }]
+        })
+      });
+      const data = await res.json();
+      const answer = data.content?.[0]?.text || 'Something went wrong — please try again.';
+      typing.innerHTML = '<div class="msg-label">Workshop AI</div>' + answer.replace(/\n/g,'<br>');
+    } catch(e) {
+      typing.innerHTML = '<div class="msg-label">Workshop AI</div>Couldn\'t reach the AI right now — but that\'s actually a great conversation starter: what happens when AI tools go down?';
+    }
+    btn.disabled = false;
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function askQuestion(q) {
+    document.getElementById('qaInput').value = q;
+    sendQA();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEAP Collective 2026 — AI Workshop Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f9fb;
+    --surface: #ffffff;
+    --border: #e4e7ed;
+    --text: #1a1d23;
+    --text-2: #5a6070;
+    --text-3: #9099aa;
+    --rik: #2563eb;
+    --rik-bg: #eff6ff;
+    --rik-border: #bfdbfe;
+    --sri: #0891b2;
+    --sri-bg: #ecfeff;
+    --sri-border: #a5f3fc;
+    --both: #7c3aed;
+    --both-bg: #f5f3ff;
+    --both-border: #ddd6fe;
+    --tryon: #059669;
+    --tryon-bg: #ecfdf5;
+    --tryon-border: #a7f3d0;
+    --gold: #b45309;
+    --gold-bg: #fffbeb;
+    --gold-border: #fde68a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .event-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 1rem;
+  }
+
+  .event-tag .dot {
+    width: 6px; height: 6px;
+    background: var(--tryon);
+    border-radius: 50%;
+  }
+
+  .page-header h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header .subtitle {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-bottom: 1.5rem;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  .meta-item svg { flex-shrink: 0; opacity: 0.5; }
+
+  /* ── SPEAKERS ── */
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 1rem;
+  }
+
+  .speakers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 560px) { .speakers-grid { grid-template-columns: 1fr; } }
+
+  .spk {
+    border-radius: 10px;
+    padding: 1.25rem;
+    border: 1px solid;
+  }
+
+  .spk-rik { background: var(--rik-bg); border-color: var(--rik-border); }
+  .spk-sri { background: var(--sri-bg); border-color: var(--sri-border); }
+
+  .spk-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .av-rik { background: var(--rik); }
+  .av-sri { background: var(--sri); }
+
+  .spk-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .spk-name-rik { color: var(--rik); }
+  .spk-name-sri { color: var(--sri); }
+
+  .spk-title {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 10px;
+  }
+
+  .spk-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+
+  .tag-rik { background: #dbeafe; color: #1d4ed8; }
+  .tag-sri { background: #cffafe; color: #0e7490; }
+
+  /* ── TIME BAR ── */
+  .time-bar-wrap { margin-bottom: 2.5rem; }
+
+  .time-bar {
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .tb-seg { height: 100%; }
+  .tb-rik   { background: var(--rik); width: 28.3%; }
+  .tb-sri   { background: var(--sri); width: 28.3%; }
+  .tb-both  { background: var(--both); width: 16.7%; }
+  .tb-tryon { background: var(--tryon); width: 35%; }
+
+  .time-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .leg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+
+  .leg-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; margin-bottom: 2.5rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 66px;
+    top: 22px;
+    bottom: 22px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    display: flex;
+    gap: 0;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .tl-time {
+    width: 56px;
+    text-align: right;
+    font-size: 12px;
+    font-family: 'Inter', monospace;
+    color: var(--text-3);
+    padding-top: 14px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tl-connector {
+    width: 22px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 16px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tl-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    flex-shrink: 0;
+  }
+
+  .dot-rik   { background: var(--rik); }
+  .dot-sri   { background: var(--sri); }
+  .dot-both  { background: var(--both); }
+  .dot-tryon { background: var(--tryon); }
+
+  .tl-card {
+    flex: 1;
+    border-radius: 10px;
+    border: 1px solid;
+    overflow: hidden;
+  }
+
+  .card-rik   { background: var(--rik-bg);   border-color: var(--rik-border); }
+  .card-sri   { background: var(--sri-bg);   border-color: var(--sri-border); }
+  .card-both  { background: var(--both-bg);  border-color: var(--both-border); }
+  .card-tryon { background: var(--tryon-bg); border-color: var(--tryon-border); }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    flex-wrap: wrap;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+  }
+
+  .pill-rik   { background: #dbeafe; color: #1d4ed8; }
+  .pill-sri   { background: #cffafe; color: #0e7490; }
+  .pill-both  { background: #ede9fe; color: #5b21b6; }
+  .pill-tryon { background: #d1fae5; color: #065f46; }
+  .pill-min   { background: #f1f5f9; color: #64748b; }
+
+  .card-body {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 0 14px 12px;
+    line-height: 1.65;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 10px;
+  }
+
+  /* ── HANDOFFS ── */
+  .handoffs { margin-bottom: 2.5rem; }
+
+  .handoff-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .handoff-item:last-child { border-bottom: none; }
+
+  .handoff-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--text);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .handoff-content {}
+  .handoff-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .handoff-text { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+  .quote-block {
+    background: var(--gold-bg);
+    border: 1px solid var(--gold-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #78350f;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .quote-label {
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── MOBILE ── */
+  .mobile-tips { margin-bottom: 2rem; }
+
+  .tip-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .tip-item:last-child { border-bottom: none; }
+
+  .tip-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--tryon-bg);
+    border: 1px solid var(--tryon-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .tip-body { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .tip-body strong { color: var(--text); font-weight: 600; }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 3rem;
+    font-size: 12px;
+    color: var(--text-3);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div style="background:var(--surface); border-bottom:1px solid var(--border);">
+<div class="page-header" style="border:none; padding-bottom:2rem;">
+  <div class="event-tag">
+    <span class="dot"></span>
+    LEAP Collective 2026 · India Society of Worcester
+  </div>
+  <h1>AI Workshop — 60-Minute Run of Show</h1>
+  <p class="subtitle">A practical, interactive workshop on AI for career growth and entrepreneurship</p>
+  <div class="meta-row">
+    <div class="meta-item">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      May 2, 2026
+    </div>
+    <div class="meta-item">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      60 minutes
+    </div>
+    <div class="meta-item">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      India Center, 152 Main St, Shrewsbury MA
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="wrapper">
+
+  <!-- SPEAKERS -->
+  <div class="section-label">Co-Speakers</div>
+  <div class="speakers-grid">
+    <div class="spk spk-rik">
+      <div class="spk-avatar av-rik">RB</div>
+      <div class="spk-name spk-name-rik">Rik Banerjee</div>
+      <div class="spk-title">AI Builder &amp; Co-Speaker</div>
+      <div class="spk-tags">
+        <span class="tag tag-rik">EzyUpload.com</span>
+        <span class="tag tag-rik">Bazaar Protocol</span>
+        <span class="tag tag-rik">DCF Platform</span>
+      </div>
+    </div>
+    <div class="spk spk-sri">
+      <div class="spk-avatar av-sri">SS</div>
+      <div class="spk-name spk-name-sri">Srikanth Savant</div>
+      <div class="spk-title">AI Builder &amp; Co-Speaker</div>
+      <div class="spk-tags">
+        <span class="tag tag-sri">AI in Business</span>
+        <span class="tag tag-sri">Entrepreneurship</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIME BREAKDOWN -->
+  <div class="section-label">Time Breakdown</div>
+  <div class="time-bar-wrap">
+    <div class="time-bar">
+      <div class="tb-seg tb-rik"></div>
+      <div class="tb-seg tb-sri"></div>
+      <div class="tb-seg tb-both"></div>
+      <div class="tb-seg tb-tryon"></div>
+    </div>
+    <div class="time-legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--rik)"></div>Rik — 17 min</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--sri)"></div>Srikanth — 17 min</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--both)"></div>Both together — 10 min</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--tryon)"></div>Audience try-ons — 21 min</div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="section-label">Session Schedule</div>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-time">0:00</div>
+      <div class="tl-connector"><div class="tl-dot dot-both"></div></div>
+      <div class="tl-card card-both">
+        <div class="card-head">
+          <span class="card-title">Joint intro — two voices, one vision</span>
+          <span class="pill pill-both">Both</span>
+          <span class="pill pill-min">5 min</span>
+        </div>
+        <div class="card-body">Each speaker introduces the other — not themselves. Instantly signals equal partnership to the audience. Followed by the hands-up AI usage poll. No slides yet.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:05</div>
+      <div class="tl-connector"><div class="tl-dot dot-rik"></div></div>
+      <div class="tl-card card-rik">
+        <div class="card-head">
+          <span class="card-title">Rik: The real AI landscape + his story</span>
+          <span class="pill pill-rik">Rik</span>
+          <span class="pill pill-min">6 min</span>
+        </div>
+        <div class="card-body">What AI actually is today — no hype. Anchored with real built products: EzyUpload.com, the DCF stock analysis platform, Bazaar Protocol. Introduces the 85/15 principle frame.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:11</div>
+      <div class="tl-connector"><div class="tl-dot dot-sri"></div></div>
+      <div class="tl-card card-sri">
+        <div class="card-head">
+          <span class="card-title">Srikanth: His AI journey — a different entry point</span>
+          <span class="pill pill-sri">Srikanth</span>
+          <span class="pill pill-min">6 min</span>
+        </div>
+        <div class="card-body">Srikanth's own origin story — full narrative, not a summary. Where he started, what changed his mind, one concrete moment. Two stories = two doors into AI the audience can choose from.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:17</div>
+      <div class="tl-connector"><div class="tl-dot dot-tryon"></div></div>
+      <div class="tl-card card-tryon">
+        <div class="card-head">
+          <span class="card-title">Try-on #1 — everyone types their first prompt</span>
+          <span class="pill pill-tryon">Hands-on</span>
+          <span class="pill pill-min">8 min</span>
+        </div>
+        <div class="card-body"><strong style="color:var(--text)">Rik on screen · Srikanth in room.</strong> Rik types live on projector. Srikanth helps mobile users get onto claude.ai. Prompt: <em>"I am a [ROLE] at a [COMPANY TYPE]. Give me 5 concrete ways AI could save me time this week."</em> Social debrief: compare lists with the person next to you.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:25</div>
+      <div class="tl-connector"><div class="tl-dot dot-rik"></div></div>
+      <div class="tl-card card-rik">
+        <div class="card-head">
+          <span class="card-title">Rik: Career case study — resume & job search</span>
+          <span class="pill pill-rik">Rik</span>
+          <span class="pill pill-min">5 min</span>
+        </div>
+        <div class="card-body">The job seeker who broke 3 months of silence after rewriting her resume with AI. Setup → AI moment → result. Takeaway: <em>"AI is the brutally honest friend who finally tells you what your resume is missing."</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:30</div>
+      <div class="tl-connector"><div class="tl-dot dot-sri"></div></div>
+      <div class="tl-card card-sri">
+        <div class="card-head">
+          <span class="card-title">Srikanth: Business case study — entrepreneur AI in action</span>
+          <span class="pill pill-sri">Srikanth</span>
+          <span class="pill pill-min">5 min</span>
+        </div>
+        <div class="card-body">Srikanth's own story or someone he knows — small business using AI to punch above their weight. Ideally personal, not textbook. Takeaway: <em>"Small businesses can now afford tools that used to cost enterprise money."</em></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:35</div>
+      <div class="tl-connector"><div class="tl-dot dot-tryon"></div></div>
+      <div class="tl-card card-tryon">
+        <div class="card-head">
+          <span class="card-title">Try-on #2 — the iteration lesson</span>
+          <span class="pill pill-tryon">Hands-on</span>
+          <span class="pill pill-min">7 min</span>
+        </div>
+        <div class="card-body"><strong style="color:var(--text)">Srikanth on screen · Rik in room.</strong> Roles switch — Srikanth types Prompt 2 live. In the same conversation: <em>"Take idea #2 and give me a ready-to-use prompt I can copy tomorrow morning."</em> Srikanth: "We're using AI to teach us to use AI better."</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:42</div>
+      <div class="tl-connector"><div class="tl-dot dot-both"></div></div>
+      <div class="tl-card card-both">
+        <div class="card-head">
+          <span class="card-title">The 85/15 principle — Rik frames, Srikanth extends</span>
+          <span class="pill pill-both">Both</span>
+          <span class="pill pill-min">5 min</span>
+        </div>
+        <div class="card-body">Rik delivers the full 85/15 framework. Srikanth immediately adds his own concrete example. Two voices landing the same idea from different angles — doubles the room's connection to it.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:47</div>
+      <div class="tl-connector"><div class="tl-dot dot-tryon"></div></div>
+      <div class="tl-card card-tryon">
+        <div class="card-head">
+          <span class="card-title">Try-on #3 — freeform, both speakers in the room</span>
+          <span class="pill pill-tryon">Hands-on</span>
+          <span class="pill pill-min">6 min</span>
+        </div>
+        <div class="card-body"><strong style="color:var(--text)">No projector. Both in the room.</strong> "Type something real from YOUR life — no prompt from us." 3 minutes of quiet trying. Then open mic: "Did anyone get something surprising?" This is the emotional peak of the session.</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-time">0:53</div>
+      <div class="tl-connector"><div class="tl-dot dot-both"></div></div>
+      <div class="tl-card card-both">
+        <div class="card-head">
+          <span class="card-title">Q&amp;A + one habit + joint close</span>
+          <span class="pill pill-both">Both</span>
+          <span class="pill pill-min">7 min</span>
+        </div>
+        <div class="card-body">3–4 questions, split by topic: career → Rik, business → Srikanth. Close: "Write down ONE AI thing you'll try this week." Hand out the starter kit. Rik delivers the closing line. Both available after for 1-on-1s.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HANDOFFS -->
+  <div class="section-label">Scripted Handoff Moments</div>
+  <div class="handoffs">
+    <div class="handoff-item">
+      <div class="handoff-num">1</div>
+      <div class="handoff-content">
+        <div class="handoff-title">Opening — they introduce each other (min 0)</div>
+        <div class="handoff-text">Each speaker introduces the other in 60 seconds. Sets the equal partnership tone before a word of content is spoken.</div>
+      </div>
+    </div>
+    <div class="handoff-item">
+      <div class="handoff-num">2</div>
+      <div class="handoff-content">
+        <div class="handoff-title">Rik → Srikanth (min 11)</div>
+        <div class="handoff-text">After the AI landscape talk:</div>
+        <div class="quote-block">
+          <span class="quote-label">Rik says</span>
+          "That's how I came into AI. But Srikanth's path looked completely different — and I think you'll find it even more relatable. Srikanth."
+        </div>
+      </div>
+    </div>
+    <div class="handoff-item">
+      <div class="handoff-num">3</div>
+      <div class="handoff-content">
+        <div class="handoff-title">Srikanth → Try-on #1 (min 17)</div>
+        <div class="handoff-text">After Srikanth's origin story:</div>
+        <div class="quote-block">
+          <span class="quote-label">Srikanth says</span>
+          "Enough talking from us. Let's actually do this. Rik, show them."
+        </div>
+      </div>
+    </div>
+    <div class="handoff-item">
+      <div class="handoff-num">4</div>
+      <div class="handoff-content">
+        <div class="handoff-title">Joint close (min 53)</div>
+        <div class="handoff-text">Both walk to the front together after try-on #3:</div>
+        <div class="quote-block">
+          <span class="quote-label">Srikanth says</span>
+          "Before we open up for questions — the one thing Rik and I both want you to walk away with."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE TIPS -->
+  <div class="section-label">Mobile-First Attendee Tips</div>
+  <div class="mobile-tips">
+    <div class="tip-item">
+      <div class="tip-icon">📋</div>
+      <div class="tip-body"><strong>Create a shared prompt doc before the event.</strong> A simple Google Doc with all 3 prompts, shortened with bit.ly. Put the link on the opening slide. Mobile users tap → copy → paste. No typing under pressure.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">📶</div>
+      <div class="tip-body"><strong>Tell attendees to use cellular data, not venue WiFi.</strong> 30 people on one network will slow things down. Say this at the start of every try-on.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">🔒</div>
+      <div class="tip-body"><strong>Pre-warn about the account creation step.</strong> Claude free tier requires sign-up. "Hit 'Sign up with Google' — 20 seconds." Say this before Try-on #1 so nobody is surprised mid-exercise.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">🤝</div>
+      <div class="tip-body"><strong>If someone can't get Claude working,</strong> pair them with a neighbor: "Look over their shoulder, tell them what role to type in." 2 minutes of pairing beats 10 minutes of troubleshooting.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>LEAP Collective 2026 · India Society of Worcester · 152 Main St, Shrewsbury MA</span>
+  <span>Rik Banerjee &amp; Srikanth Savant · AI Workshop</span>
+</footer>
+
+</body>
+</html>
