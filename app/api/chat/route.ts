@@ -1,10 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-if (!process.env.GEMINI_API_KEY) {
-  throw new Error("GEMINI_API_KEY is not set in .env.local");
-}
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const SYSTEM_PROMPT = `You are an expert AI educator at a community workshop called LEAP Collective 2026, hosted by the India Society of Worcester. The co-speakers are Rik Banerjee (AI Builder who built EzyUpload.com, the Bazaar Protocol, and a DCF stock analysis platform) and Srikanth Savant (AI Builder & entrepreneur).
 
@@ -47,7 +43,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "GEMINI_API_KEY is not configured on the server." },
+      { status: 500 }
+    );
+  }
+
   try {
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       systemInstruction: SYSTEM_PROMPT,
