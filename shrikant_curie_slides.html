@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curie Medical — Slide Deck · LEAP 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #08111e;
+  --cyan:    #0891b2;
+  --cyan-lt: #38bdf8;
+  --teal:    #059669;
+  --teal-lt: #34d399;
+  --red-lt:  #fca5a5;
+  --text:    #f1f5f9;
+  --text-2:  rgba(255,255,255,0.6);
+  --text-3:  rgba(255,255,255,0.3);
+  --surface: rgba(255,255,255,0.04);
+  --border:  rgba(255,255,255,0.1);
+  --mono:    'JetBrains Mono', monospace;
+}
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ══════════════════════════════════
+   DECK & SLIDES
+══════════════════════════════════ */
+.deck {
+  position: fixed;
+  inset: 0 0 52px 0;
+  overflow: hidden;
+}
+
+.slide {
+  display: none;
+  position: absolute;
+  inset: 0;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slide.active {
+  display: flex;
+  animation: fadeUp 0.25s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* layout variants */
+.slide.layout-split {
+  flex-direction: row;
+  align-items: center;
+  gap: 4rem;
+}
+
+.slide.layout-top {
+  justify-content: flex-start;
+  padding-top: 3.5rem;
+}
+
+.split-text { flex: 1; }
+.split-media { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+/* ══════════════════════════════════
+   TYPOGRAPHY
+══════════════════════════════════ */
+.slide-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan-lt);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slide-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.slide-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.slide-title .accent { color: var(--cyan-lt); }
+.slide-title .accent-teal { color: var(--teal-lt); }
+
+.slide-body {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: var(--text-2);
+  line-height: 1.75;
+  max-width: 640px;
+}
+
+.slide-body strong { color: var(--text); font-weight: 600; }
+
+.slide-sub {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 1.5rem;
+  line-height: 1.35;
+}
+
+/* ══════════════════════════════════
+   PLACEHOLDERS
+══════════════════════════════════ */
+.placeholder {
+  background: rgba(255,255,255,0.03);
+  border: 2px dashed rgba(255,255,255,0.18);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  min-height: 200px;
+}
+
+.ph-icon { font-size: 2.5rem; opacity: 0.4; }
+
+.ph-type {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan-lt);
+  background: rgba(8,145,178,0.12);
+  border: 1px solid rgba(8,145,178,0.25);
+  border-radius: 99px;
+  padding: 3px 12px;
+}
+
+.ph-instruction {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.55;
+  max-width: 280px;
+}
+
+.ph-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-top: 4px;
+}
+
+.placeholder-lg { min-height: 300px; }
+.placeholder-sm { min-height: 140px; }
+
+/* ══════════════════════════════════
+   COMPONENT STYLES
+══════════════════════════════════ */
+
+/* Status list (✓ / ✗) */
+.status-list { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; margin: 1.75rem 0; }
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 700;
+}
+
+.status-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.status-ok   { background: rgba(5,150,105,0.2);  border: 2px solid rgba(52,211,153,0.4); color: var(--teal-lt); }
+.status-no   { background: rgba(220,38,38,0.15); border: 2px solid rgba(252,165,165,0.3); color: var(--red-lt); }
+.status-text-ok { color: var(--teal-lt); }
+.status-text-no { color: var(--red-lt); }
+
+/* Tag pills */
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 1.25rem 0; }
+.tag {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+.tag-cyan   { background: rgba(8,145,178,0.15);  border-color: rgba(56,189,248,0.3);  color: var(--cyan-lt); }
+.tag-teal   { background: rgba(5,150,105,0.15);  border-color: rgba(52,211,153,0.3);  color: var(--teal-lt); }
+.tag-white  { background: rgba(255,255,255,0.06); border-color: var(--border);         color: var(--text-2); }
+
+/* Organ callout chips */
+.organ-chips { display: flex; gap: 12px; flex-wrap: wrap; margin: 1.5rem 0; }
+.organ-chip {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.organ-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
+/* Before/After split cards */
+.ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; margin-top: 1.75rem; }
+
+.ba-card {
+  border-radius: 14px;
+  padding: 1.75rem;
+  border: 1px solid;
+}
+
+.ba-before { background: rgba(220,38,38,0.08); border-color: rgba(252,165,165,0.2); }
+.ba-after  { background: rgba(5,150,105,0.08);  border-color: rgba(52,211,153,0.2); }
+
+.ba-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.ba-before .ba-label { color: var(--red-lt); }
+.ba-after  .ba-label { color: var(--teal-lt); }
+
+.ba-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.ba-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.ba-bullet {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.ba-before .ba-bullet { background: var(--red-lt); }
+.ba-after  .ba-bullet { background: var(--teal-lt); }
+
+/* Stat callouts (title slide footer) */
+.stat-row { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2.5rem; }
+.stat { }
+.stat-value { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--cyan-lt); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--text-3); letter-spacing: 0.04em; }
+
+/* Quote slide */
+.big-quote {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text);
+  max-width: 780px;
+  border-left: 4px solid var(--cyan);
+  padding-left: 2rem;
+  margin: 2rem 0;
+}
+
+/* Gradient accent line */
+.grad-line {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--cyan) 0%, var(--teal-lt) 100%);
+  width: 60px;
+  margin-bottom: 1.75rem;
+}
+
+/* Insight row */
+.insight-row { display: flex; gap: 16px; margin: 1.5rem 0; flex-wrap: wrap; }
+.insight-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  flex: 1;
+  min-width: 160px;
+}
+.insight-icon { font-size: 1.4rem; flex-shrink: 0; }
+.insight-text {}
+.insight-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 1px; }
+.insight-desc { font-size: 11.5px; color: var(--text-3); }
+
+/* ══════════════════════════════════
+   NAV BAR
+══════════════════════════════════ */
+.nav-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: rgba(8,17,30,0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.nav-left {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+.slide-counter {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-2);
+  min-width: 50px;
+  text-align: center;
+}
+
+.nav-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-hint {
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--mono);
+}
+
+.nav-script-link {
+  font-size: 11px;
+  color: var(--cyan-lt);
+  text-decoration: none;
+  border: 1px solid rgba(56,189,248,0.25);
+  background: rgba(8,145,178,0.1);
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.nav-script-link:hover { background: rgba(8,145,178,0.25); border-color: rgba(56,189,248,0.5); color: #fff; }
+
+/* ══════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════ */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  z-index: 200;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan) 0%, var(--teal-lt) 100%);
+  transition: width 0.25s ease;
+}
+
+/* ══════════════════════════════════
+   SLIDE 1 — Title
+══════════════════════════════════ */
+#s1 { background: radial-gradient(ellipse at 70% 50%, rgba(8,145,178,0.08) 0%, transparent 60%), var(--bg); }
+
+.s1-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.s1-eyebrow::before {
+  content: '';
+  width: 32px; height: 2px;
+  background: var(--cyan);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.s1-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.s1-title .line2 { color: var(--cyan-lt); }
+
+.s1-sub {
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--text-2);
+  max-width: 600px;
+  line-height: 1.65;
+  margin-bottom: 0.5rem;
+}
+
+.s1-url {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--cyan);
+  margin-top: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ══════════════════════════════════
+   SLIDE 9 — Intensity diagram (decorative)
+══════════════════════════════════ */
+.intensity-grid {
+  display: flex;
+  gap: 10px;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.intensity-item {
+  flex: 1;
+  min-width: 100px;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+
+.intensity-swatch {
+  height: 28px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.intensity-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.intensity-val { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="deck">
+
+  <!-- ══ SLIDE 1 — TITLE ══ -->
+  <section class="slide active" id="s1">
+    <div class="s1-eyebrow">LEAP Collective 2026 &nbsp;·&nbsp; Business Case Study &nbsp;·&nbsp; Min 0:30</div>
+    <div class="s1-title">
+      From MRI Scans<br>
+      <span class="line2">to 3D Surgery Maps</span>
+    </div>
+    <div class="s1-sub">How a two-person bootstrapped startup used AI to change surgical planning — and what it means for your business.</div>
+    <div class="s1-url">↗ curiemedical.com</div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-value">2</div><div class="stat-label">founders</div></div>
+      <div class="stat"><div class="stat-value">$0</div><div class="stat-label">VC raised</div></div>
+      <div class="stat"><div class="stat-value">AI</div><div class="stat-label">did the heavy lifting</div></div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 2 — THE PROBLEM ══ -->
+  <section class="slide layout-split" id="s2">
+    <div class="split-text">
+      <div class="slide-label">The Problem</div>
+      <div class="slide-title">An MRI scan is not<br><span class="accent">one image.</span></div>
+      <div class="slide-body">
+        It's a stack of hundreds of cross-sectional slices. Black and white. Flat.<br><br>
+        A radiologist can read them. But a surgeon planning to remove a tumour surrounded by blood vessels, nerves, and bone? They study each slice one by one — <strong>mentally assembling a 3D picture that only exists in their head.</strong><br><br>
+        Every patient. Every surgery. No exceptions.
+      </div>
+    </div>
+    <div class="split-media">
+      <div class="placeholder placeholder-lg">
+        <div class="ph-icon">🩻</div>
+        <div class="ph-type">Image</div>
+        <div class="ph-instruction">Grid of MRI scan slices — black &amp; white, cross-sectional views</div>
+        <div class="ph-code">&lt;img src="mri-slices-grid.jpg" alt="..."&gt;</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 3 — SEGMENTATION (THE HIDDEN BURDEN) ══ -->
+  <section class="slide" id="s3">
+    <div class="slide-label">The Hidden Burden</div>
+    <div class="slide-title">Reading the scan is<br>only half the work.</div>
+    <div class="slide-sub">Surgeons also do what's called <span style="color:var(--cyan-lt)">segmentation</span> — before they can plan anything.</div>
+    <div class="organ-chips">
+      <div class="organ-chip"><div class="organ-dot" style="background:#f87171"></div>Trace the tumour</div>
+      <div class="organ-chip"><div class="organ-dot" style="background:#60a5fa"></div>Map the blood vessels</div>
+      <div class="organ-chip"><div class="organ-dot" style="background:#fbbf24"></div>Outline the bone</div>
+      <div class="organ-chip"><div class="organ-dot" style="background:#a78bfa"></div>Identify soft tissue</div>
+    </div>
+    <div class="slide-body" style="max-width:700px">
+      Done manually. On 2D slices. Slice by slice. <strong>Hours per complex case.</strong><br>
+      And it starts from scratch for every patient.
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 4 — INTRODUCING ALICE ══ -->
+  <section class="slide layout-top" id="s4">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:2rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+      <div>
+        <div class="slide-label">Our Answer — 2020</div>
+        <div class="slide-title" style="margin-bottom:0.5rem;">We built <span class="accent">Alice.</span></div>
+        <div class="slide-sub" style="margin-bottom:1rem;">MRI scan in. 3D model out.</div>
+        <div class="slide-body" style="max-width:440px">
+          Alice reads the scan — which is just intensity values organised in 3D space — and generates a <strong>rotatable, zoomable anatomical model</strong> in minutes.<br><br>
+          Give a surgeon that view before they enter the OR, and you've changed the surgery before it's started.
+        </div>
+        <div class="tag-row" style="margin-top:1.25rem">
+          <span class="tag tag-cyan">3D Visualisation ✓</span>
+          <span class="tag tag-white">curiemedical.com</span>
+        </div>
+      </div>
+      <div style="flex:1; min-width:280px; max-width:440px">
+        <div class="placeholder placeholder-lg">
+          <div class="ph-icon">▶</div>
+          <div class="ph-type">Video</div>
+          <div class="ph-instruction">Alice demo — rotating 3D anatomy model from curiemedical.com</div>
+          <div class="ph-code">&lt;video src="alice-demo.mp4" controls autoplay muted loop&gt;</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 5 — BEFORE / AFTER ALICE ══ -->
+  <section class="slide" id="s5">
+    <div class="slide-label">Alice in Action</div>
+    <div class="slide-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem); margin-bottom:1.5rem;">Same patient data.<br>Two completely different views.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1;">
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Before Alice</div>
+        <div class="placeholder" style="height:100%; min-height:240px;">
+          <div class="ph-icon">🩻</div>
+          <div class="ph-type">Image</div>
+          <div class="ph-instruction">Flat 2D MRI slice — black &amp; white cross-section</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--teal-lt);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">With Alice</div>
+        <div class="placeholder" style="height:100%; min-height:240px; border-color:rgba(52,211,153,0.35);">
+          <div class="ph-icon">🫀</div>
+          <div class="ph-type" style="background:rgba(5,150,105,0.15); border-color:rgba(52,211,153,0.3); color:var(--teal-lt);">Image / Video</div>
+          <div class="ph-instruction">3D anatomy model from Alice — rotatable, full colour</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 6 — THE UNSOLVED PROBLEM ══ -->
+  <section class="slide" id="s6">
+    <div class="slide-label">Where We Stood</div>
+    <div class="slide-title" style="margin-bottom:1.75rem;">Alice solved one problem.<br>Not both.</div>
+    <ul class="status-list">
+      <li class="status-item">
+        <div class="status-icon status-ok">✓</div>
+        <span class="status-text-ok">3D Visualisation</span>
+        <span style="font-size:1rem; color:var(--text-3); font-weight:400; margin-left:8px;">— Solved</span>
+      </li>
+      <li class="status-item">
+        <div class="status-icon status-no">✗</div>
+        <span class="status-text-no">Organ Segmentation</span>
+        <span style="font-size:1rem; color:var(--text-3); font-weight:400; margin-left:8px;">— Still manual</span>
+      </li>
+    </ul>
+    <div class="slide-body" style="margin-top:1rem; max-width:680px">
+      Alice gave surgeons a 3D model. But it was one undifferentiated mass of anatomy — <strong>everything visible, nothing labelled.</strong><br>
+      Segmentation still had to happen the same way it always had.
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 7 — THE AI INSIGHT ══ -->
+  <section class="slide" id="s7">
+    <div class="slide-label">The Bet We Made</div>
+    <div class="slide-title">The signal knows<br><span class="accent-teal">what's there.</span></div>
+    <div class="slide-body" style="margin-bottom:1.75rem; max-width:640px">
+      In an MRI scan, intensity isn't random. It varies <strong>predictably by tissue type.</strong><br>
+      That signal encodes exactly what's there — we just had to teach the algorithm to read it.
+    </div>
+    <div class="intensity-grid">
+      <div class="intensity-item">
+        <div class="intensity-swatch" style="background:linear-gradient(135deg,#f8f8f8,#d0d0d0)"></div>
+        <div class="intensity-name">Bone</div>
+        <div class="intensity-val">High intensity</div>
+      </div>
+      <div class="intensity-item">
+        <div class="intensity-swatch" style="background:linear-gradient(135deg,#c084fc,#a855f7)"></div>
+        <div class="intensity-name">Tumour</div>
+        <div class="intensity-val">Irregular signal</div>
+      </div>
+      <div class="intensity-item">
+        <div class="intensity-swatch" style="background:linear-gradient(135deg,#f87171,#dc2626)"></div>
+        <div class="intensity-name">Blood vessel</div>
+        <div class="intensity-val">Distinct pattern</div>
+      </div>
+      <div class="intensity-item">
+        <div class="intensity-swatch" style="background:linear-gradient(135deg,#6ee7b7,#059669)"></div>
+        <div class="intensity-name">Soft tissue</div>
+        <div class="intensity-val">Mid-range signal</div>
+      </div>
+    </div>
+    <div class="slide-body" style="margin-top:0.5rem">
+      We built an organ segmentation algorithm that reads those patterns and <strong>labels each region automatically.</strong>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 8 — SEGMENTATION RESULT ══ -->
+  <section class="slide layout-split" id="s8">
+    <div class="split-text">
+      <div class="slide-label">The Result</div>
+      <div class="slide-title">Each organ,<br><span class="accent-teal">automatically<br>labelled.</span></div>
+      <div class="slide-body" style="margin-bottom:1.5rem">Now the surgeon doesn't just get a 3D model. They get a model where every structure is <strong>a separate, isolatable group.</strong></div>
+      <div class="organ-chips" style="flex-direction:column; gap:8px;">
+        <div class="organ-chip"><div class="organ-dot" style="background:#f87171"></div>Isolate the tumour</div>
+        <div class="organ-chip"><div class="organ-dot" style="background:#60a5fa"></div>Show the vascular system</div>
+        <div class="organ-chip"><div class="organ-dot" style="background:#fbbf24"></div>Hide the bone, see underneath</div>
+      </div>
+    </div>
+    <div class="split-media">
+      <div class="placeholder placeholder-lg" style="border-color:rgba(52,211,153,0.35);">
+        <div class="ph-icon">🎨</div>
+        <div class="ph-type" style="background:rgba(5,150,105,0.15); border-color:rgba(52,211,153,0.3); color:var(--teal-lt);">Video / Image</div>
+        <div class="ph-instruction">Segmented 3D model with colour-coded organs — tumour, vessels, bone each in separate groups</div>
+        <div class="ph-code">&lt;video src="segmentation-demo.mp4" controls&gt;</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 9 — BEFORE vs AFTER ══ -->
+  <section class="slide" id="s9">
+    <div class="slide-label">Impact</div>
+    <div class="slide-title" style="margin-bottom:0.5rem;">Hours of manual work.<br><span class="accent-teal">Now automatic.</span></div>
+    <div class="ba-grid">
+      <div class="ba-card ba-before">
+        <div class="ba-label">Before AI</div>
+        <ul class="ba-list">
+          <li class="ba-row"><div class="ba-bullet"></div>Hours tracing organs manually on 2D slices</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Segmentation redone from scratch per patient</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Mental 3D model lives only in the surgeon's head</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Complex cases require the most senior surgeon</li>
+        </ul>
+      </div>
+      <div class="ba-card ba-after">
+        <div class="ba-label">With Alice + AI</div>
+        <ul class="ba-list">
+          <li class="ba-row"><div class="ba-bullet"></div>Segmentation runs automatically in the background</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Colour-coded, labelled 3D model ready before surgery</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Any member of the surgical team can review it</li>
+          <li class="ba-row"><div class="ba-bullet"></div>Cognitive clarity → reduced risk in the OR</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SLIDE 10 — TAKEAWAY ══ -->
+  <section class="slide" id="s10">
+    <div class="slide-label">The Point</div>
+    <div class="big-quote">"AI didn't require us to be a big company. It required us to understand the problem."</div>
+    <div class="insight-row">
+      <div class="insight-chip">
+        <div class="insight-icon">👥</div>
+        <div class="insight-text">
+          <div class="insight-name">2 founders</div>
+          <div class="insight-desc">No VC. Bootstrapped.</div>
+        </div>
+      </div>
+      <div class="insight-chip">
+        <div class="insight-icon">🧠</div>
+        <div class="insight-text">
+          <div class="insight-name">Domain expertise</div>
+          <div class="insight-desc">Knew the data well enough to ask the right question.</div>
+        </div>
+      </div>
+      <div class="insight-chip">
+        <div class="insight-icon">🏥</div>
+        <div class="insight-text">
+          <div class="insight-name">Real-world impact</div>
+          <div class="insight-desc">Time back for surgeons. Safety margin in the OR.</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-body" style="margin-top:1.75rem">
+      The intensity signal was sitting in every MRI scan in every hospital in the world. The algorithm just hadn't been built yet.<br>
+      That's what AI looks like when you apply it to a specific, well-understood problem with real stakes. <strong>Not magic. Pattern recognition, put to work where it matters.</strong>
+    </div>
+    <div style="font-family:var(--mono); font-size:13px; color:var(--cyan); margin-top:1.75rem;">↗ curiemedical.com</div>
+  </section>
+
+</div><!-- /deck -->
+
+<!-- ══ NAV BAR ══ -->
+<div class="nav-bar">
+  <div class="nav-left">← → or Space to navigate &nbsp;·&nbsp; F11 for fullscreen</div>
+  <div class="nav-center">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">←</button>
+    <span class="slide-counter" id="counter">1 / 10</span>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">→</button>
+  </div>
+  <div class="nav-right">
+    <span class="nav-hint">LEAP 2026 · Curie Medical</span>
+    <a href="shrikant_curie_medical.html" class="nav-script-link">🎤 Script</a>
+    <a href="schedule.html" class="nav-script-link">🗓 Schedule</a>
+  </div>
+</div>
+
+<script>
+const TOTAL = 10;
+let current = 1;
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next < 1 || next > TOTAL) return;
+
+  document.getElementById('s' + current).classList.remove('active');
+  current = next;
+  document.getElementById('s' + current).classList.add('active');
+
+  document.getElementById('counter').textContent = current + ' / ' + TOTAL;
+  document.getElementById('progressFill').style.width = ((current / TOTAL) * 100) + '%';
+  document.getElementById('prevBtn').disabled = current === 1;
+  document.getElementById('nextBtn').disabled = current === TOTAL;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ')  { e.preventDefault(); navigate(1); }
+  if (e.key === 'ArrowLeft')                     { e.preventDefault(); navigate(-1); }
+});
+
+// init
+document.getElementById('prevBtn').disabled = true;
+document.getElementById('progressFill').style.width = ((1 / TOTAL) * 100) + '%';
+</script>
+
+</body>
+</html>

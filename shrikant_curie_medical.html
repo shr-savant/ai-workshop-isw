@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shrikant: Curie Medical Case Study — LEAP 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0f172a;
+    --paper:   #f8fafc;
+    --surface: #ffffff;
+    --border:  #e2e8f0;
+    --muted:   #64748b;
+    --hint:    #94a3b8;
+    --blue:    #2563eb;
+    --cyan:    #0891b2;
+    --teal:    #059669;
+    --cyan-bg: #ecfeff;
+    --cyan-bd: #a5f3fc;
+    --teal-bg: #ecfdf5;
+    --teal-bd: #a7f3d0;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── SITE NAV ── */
+  .site-nav {
+    background: #060d18;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 46px;
+  }
+  .site-nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .site-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+  .site-nav-link {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .site-nav-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+  .site-nav-link.current { color: #fff; background: rgba(8,145,178,0.25); border-color: rgba(8,145,178,0.4); }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--ink);
+    padding: 2.5rem 1.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan) 0%, var(--teal) 60%, #10b981 100%);
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+
+  .event-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 99px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .page-header h1 .accent { color: #34d399; }
+
+  .page-header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1.25rem;
+  }
+
+  .meta-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 4px 11px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--mono);
+  }
+
+  /* ── PAGE ── */
+  .page { max-width: 720px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* ── CONTEXT CARD ── */
+  .context-card {
+    background: var(--teal-bg);
+    border: 1px solid var(--teal-bd);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 2rem;
+    font-size: 13px;
+    color: #065f46;
+    line-height: 1.65;
+  }
+  .context-card strong { font-weight: 600; }
+
+  /* ── THREE-BEAT CALLOUT ── */
+  .beat-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 2rem;
+  }
+  .beat-item {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    text-align: center;
+  }
+  .beat-value {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .beat-label {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── SCRIPT CARD ── */
+  .script-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+  }
+
+  .script-head {
+    background: var(--ink);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .speaker-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(8,145,178,0.2);
+    border: 1px solid rgba(8,145,178,0.35);
+    border-radius: 6px;
+    padding: 5px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #67e8f9;
+  }
+
+  .spk-av {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .time-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+
+  /* ── SCRIPT TEXT ── */
+  .script-body { padding: 2rem 2rem 2.25rem; }
+
+  .script-text {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #1e293b;
+  }
+
+  .script-text p { margin-bottom: 1.5rem; }
+  .script-text p:last-child { margin-bottom: 0; }
+
+  .script-text em { font-style: italic; color: #475569; }
+  .script-text strong { font-weight: 700; color: var(--ink); }
+
+  .pause {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(8,145,178,0.6);
+    background: rgba(8,145,178,0.06);
+    border: 1px solid rgba(8,145,178,0.15);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin: 0 4px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .beat {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: rgba(5,150,105,0.6);
+    background: rgba(5,150,105,0.06);
+    border: 1px solid rgba(5,150,105,0.15);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin: 0 4px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  /* ── DIVIDER LABEL ── */
+  .act-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.75rem 0 1.5rem;
+  }
+  .act-divider::before, .act-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .act-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--hint);
+    white-space: nowrap;
+  }
+
+  /* ── HANDOFF NOTE ── */
+  .handoff-note {
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .handoff-note::before {
+    content: '↳';
+    font-size: 14px;
+    color: var(--teal);
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--ink);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .site-footer p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+  }
+  .site-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  .site-footer a:hover { color: rgba(255,255,255,0.7); }
+  .footer-nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .footer-link { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; padding: 4px 10px; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; transition: all 0.15s; }
+  .footer-link:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.2); }
+
+  @media (max-width: 480px) {
+    .beat-row { flex-direction: column; }
+    .script-body { padding: 1.5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="index.html" class="site-nav-link">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="site-nav-link">📋 AI Starter Kit</a>
+    <a href="schedule.html" class="site-nav-link">🗓 Schedule</a>
+    <a href="shrikant_ai_journey.html" class="site-nav-link">🎤 Shrikant's Journey</a>
+    <a href="recipe_keeper.html" class="site-nav-link">🍽 Recipe Keeper</a>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="event-chip">LEAP Collective 2026 · Business Case Study</div>
+    <h1>From MRI Scans<br><span class="accent">to 3D Surgery Maps</span></h1>
+    <p>How a two-person bootstrapped startup used AI to solve a problem that hospitals had been working around for decades</p>
+    <div class="meta-row">
+      <div class="meta-pill">⏱ ~5 min</div>
+      <div class="meta-pill">~580 words</div>
+      <div class="meta-pill">🎤 Spoken by Shrikant Savant</div>
+      <div class="meta-pill">📍 Min 0:30</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="page">
+
+  <div class="context-card">
+    <strong>Context:</strong> Shrikant delivers this at 0:30, right after Rik's career case study. This is a personal story — Shrikant's own startup. Keep it grounded and specific. Resist the urge to editorialize. Let the facts do the work. The closing line sets up the 85/15 segue.
+  </div>
+
+  <div style="margin-bottom:2rem;">
+    <a href="shrikant_curie_slides.html" class="script-link" style="font-size:13px; padding:7px 14px;">
+      📽 Open slide deck →
+    </a>
+  </div>
+
+  <div class="beat-row">
+    <div class="beat-item">
+      <div class="beat-value">2020</div>
+      <div class="beat-label">Started Curie Medical — two engineers, no VC</div>
+    </div>
+    <div class="beat-item">
+      <div class="beat-value">Alice</div>
+      <div class="beat-label">MRI scans → rotatable 3D anatomy models</div>
+    </div>
+    <div class="beat-item">
+      <div class="beat-value">AI</div>
+      <div class="beat-label">Organ segmentation: hours of manual work → automatic</div>
+    </div>
+  </div>
+
+  <div class="script-card">
+    <div class="script-head">
+      <div class="speaker-chip">
+        <div class="spk-av">SS</div>
+        Shrikant Savant · speaking
+      </div>
+      <div class="time-badge">0:30 → 0:35</div>
+    </div>
+
+    <div class="script-body">
+      <div class="script-text">
+
+        <div class="act-divider"><span class="act-label">The problem</span></div>
+
+        <p>In 2020, a colleague and I started a company called Curie Medical. We'd both spent years in engineering — 3D modeling, simulation, machine learning — and we kept noticing the same thing when we looked at medical imaging: the technology was decades behind.</p>
+
+        <p>An MRI scan isn't one image. It's a stack of hundreds of cross-sectional slices. Black and white. Flat. A trained radiologist can read them. But a surgeon planning to remove a tumor surrounded by blood vessels, nerves, and bone? They study each slice, one by one, mentally assembling a 3D picture that only exists in their head. <span class="pause">pause</span> Every time. For every patient. Every surgery.</p>
+
+        <p>The data was there. The visualization wasn't. And we knew how to build it.</p>
+
+        <div class="act-divider"><span class="act-label">Alice</span></div>
+
+        <p>We built software we called Alice. An MRI scan is, at its core, intensity values organized in 3D space — and we knew how to turn 3D data into 3D models. Alice reads the scan and generates a rotatable, zoomable anatomical model in minutes. The name came from the idea that giving a surgeon that view should feel like what Alice felt stepping into Wonderland — suddenly seeing something familiar from a completely different angle.</p>
+
+        <p>The website is <strong>curiemedical.com</strong>. <span class="beat">beat</span> Give a surgeon a 3D model of a patient's anatomy before they enter the operating room, and you've changed the surgery before it's started.</p>
+
+        <div class="act-divider"><span class="act-label">Where AI came in</span></div>
+
+        <p>But there was a second problem — one that had existed long before Alice, and that Alice, on its own, hadn't solved.</p>
+
+        <p>In conventional imaging, surgeons don't just read scans. They also do what's called segmentation — manually tracing which regions of the scan belong to which organ. This cluster is bone. This one is the tumor. This is a vessel. Done by hand, on a stack of 2D slices, it can take hours on a complex case. And it has to be done fresh for every patient.</p>
+
+        <p>Alice gave them a 3D model. But that model was still one undifferentiated mass of anatomy — everything visible, nothing labeled. Segmentation still had to happen the same way it always had. <span class="pause">pause</span> We'd solved the visualization. We hadn't solved the segmentation.</p>
+
+        <p>Here's where we made a bet. In an MRI scan, signal intensity isn't random. It varies predictably by tissue type — bone reads differently from muscle, muscle reads differently from a vessel, a vessel reads differently from a tumor. That signal encodes exactly what's there. So we built an organ segmentation algorithm that reads those intensity patterns and labels each region automatically. <span class="beat">beat</span> Now the surgeon doesn't just get a 3D model. They get a 3D model where every organ is a separate, isolated group. Show only the vascular system. Hide the bone. Isolate the tumor.</p>
+
+        <p>What used to take hours now happens in the background while the coffee brews.</p>
+
+        <div class="act-divider"><span class="act-label">The takeaway</span></div>
+
+        <p>Curie Medical is a bootstrapped startup. Two people. No VC round. We didn't have an enterprise budget — we had domain expertise and a specific problem we understood well enough to know what to ask of the data.</p>
+
+        <p>AI didn't require us to be a big company. It required us to understand the problem. <span class="pause">pause</span> The intensity signal was sitting in every MRI scan in every hospital in the world. The algorithm just hadn't been built yet. We built it. And what it gives surgeons is time back, cognitive load reduced, and in surgery — cognitive clarity is not a comfort. It's a safety margin.</p>
+
+        <p>That's what AI looks like when you apply it to a specific, well-understood problem with real stakes. Not magic. Pattern recognition, put to work where it matters.</p>
+
+      </div>
+
+      <div class="handoff-note">Rik picks up · segues into Try-on #2 at 0:35</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-nav">
+    <a href="index.html" class="footer-link">🏠 Home</a>
+    <a href="ai_starter_kit.html" class="footer-link">📋 AI Starter Kit</a>
+    <a href="schedule.html" class="footer-link">🗓 Schedule</a>
+    <a href="shrikant_ai_journey.html" class="footer-link">🎤 Shrikant's Journey</a>
+    <a href="recipe_keeper.html" class="footer-link">🍽 Recipe Keeper</a>
+  </div>
+  <p>LEAP Collective 2026 &nbsp;·&nbsp; India Society of Worcester &nbsp;·&nbsp; <a href="https://iswonline.org/event-6599047">iswonline.org</a> &nbsp;·&nbsp; Rik Banerjee &amp; Shrikant Savant</p>
+</footer>
+
+</body>
+</html>
