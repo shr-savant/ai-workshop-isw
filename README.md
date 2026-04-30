@@ -2,7 +2,7 @@
 
 Interactive web app for the **Making AI Work For You** workshop at LEAP Collective 2026, hosted by the India Society of Worcester (May 2, Shrewsbury MA).
 
-Co-presented by **Rik Banerjee** and **Srikanth Savant**.
+Co-presented by **Rik Banerjee** and **Shrikant Savant**.
 
 ---
 
