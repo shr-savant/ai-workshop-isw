@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Making AI Work For You — LEAP Collective 2026</title>
-<meta name="description" content="Live icebreaker poll and Q&A for the LEAP Collective 2026 AI Workshop with Rik Banerjee & Srikanth Savant">
+<meta name="description" content="Live icebreaker poll and Q&A for the LEAP Collective 2026 AI Workshop with Rik Banerjee & Shrikant Savant">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -733,6 +733,7 @@
     <a href="ai_starter_kit.html" class="site-nav-link">📋 AI Starter Kit</a>
     <a href="flyer.html" class="site-nav-link">📣 Flyer</a>
     <a href="schedule.html" class="site-nav-link">🗓 Schedule</a>
+    <a href="recipe_keeper.html" class="site-nav-link">🍽 Recipe Keeper</a>
   </div>
 </nav>
 
@@ -752,7 +753,7 @@
       </div>
       <div class="spk-chip spk-chip-sri">
         <div class="spk-av av-s">SS</div>
-        Srikanth Savant · AI Builder
+        Shrikant Savant · AI Builder
       </div>
     </div>
   </div>
@@ -930,12 +931,13 @@
     <a href="ai_starter_kit.html" class="footer-link">📋 AI Starter Kit</a>
     <a href="flyer.html" class="footer-link">📣 Flyer</a>
     <a href="schedule.html" class="footer-link">🗓 Schedule</a>
+    <a href="recipe_keeper.html" class="footer-link">🍽 Recipe Keeper</a>
   </div>
   <p>
     LEAP Collective 2026 &nbsp;·&nbsp;
     India Society of Worcester &nbsp;·&nbsp;
     <a href="https://iswonline.org/event-6599047">iswonline.org</a> &nbsp;·&nbsp;
-    Rik Banerjee &amp; Srikanth Savant
+    Rik Banerjee &amp; Shrikant Savant
   </p>
 </footer>
 
@@ -1060,7 +1062,7 @@ async function sendQA() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
-        system: `You are an expert AI educator at a community workshop called LEAP Collective 2026, hosted by the India Society of Worcester. The co-speakers are Rik Banerjee (AI Builder who built EzyUpload.com, the Bazaar Protocol, and a DCF stock analysis platform) and Srikanth Savant (AI Builder & entrepreneur).
+        system: `You are an expert AI educator at a community workshop called LEAP Collective 2026, hosted by the India Society of Worcester. The co-speakers are Rik Banerjee (AI Builder who built EzyUpload.com, the Bazaar Protocol, and a DCF stock analysis platform) and Shrikant Savant (AI Builder & entrepreneur).
 
 Your answers are warm, jargon-free, honest, and practical. Keep responses to 3–5 sentences unless the question genuinely needs more. Use everyday analogies. Never overhype AI. If someone asks about tools, mention Claude, ChatGPT, Perplexity, Canva AI, or Notion AI as appropriate. Always refer back to the 85/15 principle when relevant: AI does 85% of the work, the human provides the irreplaceable 15%.`,
         messages: history
