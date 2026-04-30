@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Workshop Playbook · LEAP 2026 AI Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --ink:       #0f172a;
+  --paper:     #f8fafc;
+  --surface:   #ffffff;
+  --border:    #e2e8f0;
+  --muted:     #64748b;
+  --hint:      #94a3b8;
+  --blue:      #2563eb;
+  --blue-bg:   #eff6ff;
+  --blue-bd:   #bfdbfe;
+  --teal:      #059669;
+  --teal-bg:   #ecfdf5;
+  --teal-bd:   #a7f3d0;
+  --amber:     #b45309;
+  --amber-bg:  #fffbeb;
+  --amber-bd:  #fde68a;
+  --purple:    #5b21b6;
+  --purple-bg: #f5f3ff;
+  --purple-bd: #ddd6fe;
+  --mono:      'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ── Nav ── */
+.site-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; height: 3.25rem;
+}
+.site-nav-brand {
+  font-family: 'Sora', sans-serif; font-size: 0.875rem;
+  font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+}
+.site-nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.site-nav-link {
+  font-size: 0.8125rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; padding: 0.375rem 0.75rem;
+  border-radius: 6px; transition: background 0.15s, color 0.15s;
+}
+.site-nav-link:hover { background: var(--paper); color: var(--ink); }
+.site-nav-link.current { background: var(--blue-bg); color: var(--blue); }
+
+/* ── Page header ── */
+.page-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 1.5rem 2.5rem;
+}
+.page-header-inner { max-width: 760px; margin: 0 auto; }
+.event-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--blue-bg); border: 1px solid var(--blue-bd);
+  border-radius: 100px; padding: 0.3rem 0.875rem;
+  font-size: 0.75rem; font-weight: 600; color: var(--blue);
+  letter-spacing: 0.03em; margin-bottom: 1.25rem;
+}
+.chip-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; }
+.page-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800; color: var(--ink);
+  letter-spacing: -0.02em; margin-bottom: 0.5rem; line-height: 1.15;
+}
+.page-subtitle { font-size: 1.0625rem; color: var(--muted); margin-bottom: 1.5rem; max-width: 600px; }
+.header-note {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  background: var(--amber-bg); border: 1px solid var(--amber-bd);
+  border-radius: 10px; padding: 0.875rem 1rem;
+  font-size: 0.875rem; color: var(--amber); max-width: 600px;
+}
+.header-note-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Main content ── */
+.page-main { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+/* ── Section ── */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--ink);
+}
+.time-badge {
+  font-size: 0.75rem; font-weight: 600; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 100px; padding: 0.25rem 0.75rem;
+}
+
+/* ── Four-part block ── */
+.block { margin-bottom: 1.25rem; }
+.block-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--hint);
+  margin-bottom: 0.375rem;
+}
+.block-body { font-size: 0.9375rem; color: var(--muted); line-height: 1.65; }
+.block-body strong { color: var(--ink); }
+
+/* ── Try it block ── */
+.try-block {
+  background: var(--teal-bg);
+  border: 1px solid var(--teal-bd);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.try-block-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+.try-instruction {
+  font-size: 0.875rem; color: var(--teal); font-weight: 500;
+  margin-bottom: 1rem; line-height: 1.5;
+}
+.try-link {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.8125rem; font-weight: 600; color: var(--blue);
+  text-decoration: none; background: var(--blue-bg);
+  border: 1px solid var(--blue-bd); border-radius: 6px;
+  padding: 0.3rem 0.75rem; margin-bottom: 1rem;
+  transition: background 0.15s;
+}
+.try-link:hover { background: var(--blue-bd); }
+
+/* ── Code / prompt cards ── */
+.prompt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+.prompt-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.625rem 0.875rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+.prompt-card-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.label-vague { color: #dc2626; }
+.label-briefed { color: var(--teal); }
+.label-neutral { color: var(--muted); }
+.copy-btn {
+  font-size: 0.75rem; font-weight: 600; color: var(--muted);
+  background: none; border: 1px solid var(--border);
+  border-radius: 5px; padding: 0.2rem 0.6rem; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.copy-btn:hover { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-bd); }
+.copy-btn.copied { background: var(--teal-bg); color: var(--teal); border-color: var(--teal-bd); }
+.prompt-card-body {
+  padding: 0.875rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Small note ── */
+.small-note {
+  display: flex; gap: 0.5rem; align-items: flex-start;
+  font-size: 0.8125rem; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.75rem;
+  margin-top: 0.75rem;
+}
+.small-note-icon { flex-shrink: 0; }
+
+/* ── What's next ── */
+.whats-next {
+  font-size: 0.875rem; color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem; margin-top: 0.5rem;
+  font-style: italic;
+}
+.whats-next::before { content: "→ "; color: var(--blue); font-style: normal; font-weight: 600; }
+
+/* ── Sub-section ── */
+.subsection { margin-top: 1.5rem; }
+.subsection-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.subsection-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 4px; padding: 0.15rem 0.5rem;
+}
+
+/* ── Comparison table ── */
+.compare-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.875rem; margin-top: 1rem;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.compare-table th {
+  text-align: left; padding: 0.625rem 0.875rem;
+  background: var(--paper); font-weight: 600; color: var(--muted);
+  font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.compare-table td {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink); vertical-align: top;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table td:first-child { color: var(--muted); font-weight: 500; width: 30%; }
+
+/* ── Folder diagram ── */
+.folder-block {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  line-height: 2;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+  overflow-x: auto;
+}
+.folder-block .dir { color: #7dd3fc; }
+.folder-block .file { color: #e2e8f0; }
+.folder-block .comment { color: #475569; }
+
+/* ── 4-week plan ── */
+.week-plan {
+  background: var(--purple-bg);
+  border: 1px solid var(--purple-bd);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 1rem;
+}
+.week-plan-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 0.875rem; font-weight: 700; color: var(--purple);
+  margin-bottom: 1rem; letter-spacing: 0.02em;
+}
+.week-row {
+  display: flex; gap: 1rem; align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+.week-row:last-child { margin-bottom: 0; }
+.week-badge {
+  font-size: 0.6875rem; font-weight: 700; color: var(--purple);
+  background: var(--surface); border: 1px solid var(--purple-bd);
+  border-radius: 100px; padding: 0.2rem 0.6rem; white-space: nowrap;
+  flex-shrink: 0; margin-top: 1px;
+}
+.week-text { font-size: 0.875rem; color: var(--ink); }
+.week-text em { color: var(--muted); font-style: normal; display: block; font-size: 0.8125rem; margin-top: 0.125rem; }
+
+/* ── Closing callout ── */
+.closing-callout {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+.closing-quote {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.375rem);
+  font-weight: 700; color: #f1f5f9;
+  line-height: 1.5; margin-bottom: 0.75rem;
+}
+.closing-quote span { color: #7dd3fc; }
+.closing-sub { font-size: 0.875rem; color: #64748b; }
+
+/* ── References ── */
+.refs {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.refs-title {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--hint); margin-bottom: 0.875rem;
+}
+.ref-link {
+  display: block; font-size: 0.875rem; color: var(--blue);
+  text-decoration: none; margin-bottom: 0.5rem;
+  transition: color 0.15s;
+}
+.ref-link:hover { color: var(--ink); text-decoration: underline; }
+.ref-link span { color: var(--muted); font-size: 0.8125rem; margin-left: 0.5rem; }
+
+/* ── Divider ── */
+.section-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 2rem 0; color: var(--hint); font-size: 0.75rem;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="/hub" class="site-nav-link">🏠 Home</a>
+    <a href="/kit" class="site-nav-link">📋 AI Starter Kit</a>
+    <a href="/playground" class="site-nav-link">🧪 Playground</a>
+    <a href="/prompts" class="site-nav-link">📚 Prompts</a>
+    <a href="/schedule.html" class="site-nav-link">🗓 Schedule</a>
+    <a href="/playbook.html" class="site-nav-link current">📖 Playbook</a>
+    <a href="/shrikant_curie_medical.html" class="site-nav-link">🏥 Curie Medical</a>
+    <a href="/recipe_keeper.html" class="site-nav-link">🍳 Recipe Keeper</a>
+  </div>
+</nav>
+
+<!-- ── Page header ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="event-chip"><span class="chip-dot"></span> LEAP Collective 2026 · Hands-on</div>
+    <h1 class="page-title">The Workshop Playbook</h1>
+    <p class="page-subtitle">Four things to try yourself — in our Try Out section, or in your own ChatGPT or Claude.</p>
+    <div class="header-note">
+      <span class="header-note-icon">📱</span>
+      <span>Open this on your phone or laptop. As you read each section, copy the example into the <a href="/playground" style="color:inherit;font-weight:600;">Try Out section</a> of this site, ChatGPT, or Claude — and see what happens.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<main class="page-main">
+
+  <!-- ── Section 1 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">1. The Prompt Formula</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">A good prompt has four parts — <strong>Role, Context, Task, Format.</strong> Adding these turns vague output into useful output.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Most people get bad AI output because they give bad briefs. The formula fixes 80% of that in 30 seconds.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Paste each into the Try Out section, ChatGPT, or Claude. Compare the two outputs side by side.</p>
+      <a href="/playground" class="try-link">🧪 Open Try Out section →</a>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-vague">Vague prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Write an email to my customers about our sale.</div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-briefed">Briefed prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Role: You are a friendly local restaurant owner.
+Context: We're doing 20% off this weekend for our 5-year anniversary. Customers are regulars — families and couples for special occasions.
+Task: Write the announcement email.
+Format: Warm and personal, under 100 words, one clear call-to-action.</div>
+      </div>
+    </div>
+
+    <p class="whats-next">Once you see how much the formula helps, the next problem shows up — you don't want to retype your role and tone every single time. That's what memory solves.</p>
+  </div>
+
+  <div class="section-divider">section 2 of 4</div>
+
+  <!-- ── Section 2 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">2. Stop Repeating Yourself</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">Modern AI tools let you set <strong>who you are and how you like things written — once.</strong> Every chat after that already knows.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Re-explaining yourself in every chat is the biggest hidden time-waster in AI. Set it once, save hours every week.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Open ChatGPT or Claude. Paste this once into a new chat. Then start a fresh chat and ask anything — notice how AI already knows who you are.</p>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-neutral">Memory seed prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Please remember the following about me for all future conversations:
+- I am a [your role, e.g., school teacher / small business owner / parent]
+- I prefer responses that are [warm and direct / concise and practical / detailed and thorough]
+- When I ask you to write something, default to [under 200 words / no jargon / a friendly conversational tone]
+- I value [practical advice / honesty over hype / step-by-step clarity]</div>
+      </div>
+
+      <div class="small-note">
+        <span class="small-note-icon">💡</span>
+        <span>You only run this once. After that, every chat starts with this context already loaded. To check it worked: open a new chat and ask <strong>"What do you remember about me?"</strong></span>
+      </div>
+    </div>
+
+    <p class="whats-next">Memory works for you personally. But what about a project where multiple AI tools or teammates are involved? That needs a shared rulebook.</p>
+  </div>
+
+  <div class="section-divider">section 3 of 4</div>
+
+  <!-- ── Section 3 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">3. Project Rulebooks and Reusable Workflows</h2>
+      <span class="time-badge">~10 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">When you move beyond personal use into projects, two new pieces help: <strong>AGENTS.md</strong> and <strong>Skills.</strong> Both are simple text files that travel with your project.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Memory is personal. AGENTS.md and Skills are how context travels — across tools, across teammates, across projects.</p>
+    </div>
+
+    <!-- Part A -->
+    <div class="subsection">
+      <div class="subsection-title">
+        <span class="subsection-label">Part A</span>
+        AGENTS.md
+      </div>
+      <p class="block-body" style="margin-bottom:1rem;">Think of it as a README for AI. A single Markdown file that tells any AI tool how to work on your project. Used by 60,000+ projects on GitHub. Stewarded by the Linux Foundation as an open standard.</p>
+
+      <div class="try-block">
+        <div class="try-block-label">Try It Yourself</div>
+        <p class="try-instruction">Copy this template, fill in the blanks for any project you work on, and save it as <strong>AGENTS.md</strong> in your project folder.</p>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span class="prompt-card-label label-neutral">AGENTS.md template</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+          </div>
+          <div class="prompt-card-body"># My Project AGENTS.md
+
+## How to work on this project
+- Always run tests before finishing: [your test command]
+- Code style: simple, readable, comments only when needed
+- Never edit files in [folder name] — that's the old system
+
+## Gotchas
+- [The thing that has tripped up every newcomer]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part B -->
+    <div class="subsection">
+      <div class="subsection-title">
+        <span class="subsection-label">Part B</span>
+        Skills
+      </div>
+      <p class="block-body" style="margin-bottom:1rem;">A folder with a SKILL.md file that packages a repeatable workflow. Anthropic introduced these in October 2025. Use the same Skill across Claude.ai, Claude Code, and the API.</p>
+
+      <div class="try-block">
+        <div class="try-block-label">Try It Yourself</div>
+        <p class="try-instruction">Paste this into Claude. It becomes a reusable Skill you can trigger any time you need to write in your brand voice.</p>
+
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span class="prompt-card-label label-neutral">Brand voice Skill</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+          </div>
+          <div class="prompt-card-body">---
+name: my-brand-voice
+description: Use when writing customer emails or social posts for my
+             restaurant. Applies our voice — warm, family-oriented,
+             never pushy or marketer-y.
+---
+
+# How we write to our customers
+
+## Voice
+- Talk like a neighbor, not a marketer
+- Use first names when possible
+- Never say "valued customer" or "exclusive offer"
+
+## Structure
+1. One-line warm opener
+2. The actual point
+3. Soft call-to-action
+4. Sign off with the owner's name</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>AGENTS.md</th>
+          <th>Skills</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Scope</td>
+          <td>One per project</td>
+          <td>Many per task type</td>
+        </tr>
+        <tr>
+          <td>Loaded</td>
+          <td>Always</td>
+          <td>On demand</td>
+        </tr>
+        <tr>
+          <td>Best for</td>
+          <td>Project rules</td>
+          <td>Repeatable workflows</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="whats-next" style="margin-top:1.25rem;">Now you have all the pieces. The last step is seeing how they all fit together in a real project.</p>
+  </div>
+
+  <div class="section-divider">section 4 of 4</div>
+
+  <!-- ── Section 4 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">4. Organizing a Real Project</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">Prompts, memory, AGENTS.md, and Skills each have their own home in a <strong>well-organized project.</strong></p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">When all four work together, AI stops feeling like a clever toy and starts feeling like a teammate.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Use this as the template for any new project where you want AI to help consistently.</p>
+
+      <div class="folder-block"><span class="dir">my-project/</span>
+├── <span class="file">README.md</span>          <span class="comment">← for humans</span>
+├── <span class="file">AGENTS.md</span>          <span class="comment">← for AI agents — the project rulebook</span>
+├── <span class="dir">.claude/</span>
+│   └── <span class="dir">skills/</span>
+│       ├── <span class="dir">brand-voice/</span>
+│       │   └── <span class="file">SKILL.md</span>
+│       └── <span class="dir">weekly-report/</span>
+│           └── <span class="file">SKILL.md</span>
+└── <span class="dir">src/</span>                <span class="comment">← your actual project files</span></div>
+    </div>
+
+    <div class="week-plan">
+      <div class="week-plan-title">📅 Your 4-Week Plan</div>
+      <div class="week-row">
+        <span class="week-badge">Week 1</span>
+        <div class="week-text">Master the prompt formula.<em>Use it for every AI request — Role, Context, Task, Format.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 2</span>
+        <div class="week-text">Run the memory seed prompt once.<em>Set it in ChatGPT and Claude. Then forget about it.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 3</span>
+        <div class="week-text">Write one Skill for a task you do every week.<em>Pick something repetitive — a weekly email, a report, a social post.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 4</span>
+        <div class="week-text">If you have a real project, add an AGENTS.md.<em>Even one rule is enough to start.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Closing ── -->
+  <div class="closing-callout">
+    <p class="closing-quote">"AI does <span>85%</span>. You own the <span>15%</span>.<br>The 15% is the brief, the context, the rulebook — the things only you can give it."</p>
+    <p class="closing-sub">— Making AI Work For You · LEAP Collective 2026</p>
+  </div>
+
+  <!-- ── References ── -->
+  <div class="refs">
+    <div class="refs-title">References</div>
+    <a href="https://agentprotocol.ai" target="_blank" rel="noopener" class="ref-link">agents.md <span>— the official open standard (Linux Foundation)</span></a>
+    <a href="https://docs.anthropic.com/en/docs/claude-code/skills" target="_blank" rel="noopener" class="ref-link">Anthropic Agent Skills documentation <span>— docs.anthropic.com</span></a>
+    <a href="https://github.com/anthropics/claude-code-skills" target="_blank" rel="noopener" class="ref-link">Anthropic Skills GitHub repo <span>— open examples and templates</span></a>
+    <a href="https://docs.anthropic.com/en/docs/claude-code/slash-commands" target="_blank" rel="noopener" class="ref-link">Claude Code Skills documentation <span>— slash commands and custom skills</span></a>
+  </div>
+
+</main>
+
+<script>
+function copyPrompt(btn) {
+  const body = btn.closest('.prompt-card').querySelector('.prompt-card-body');
+  navigator.clipboard.writeText(body.innerText.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
