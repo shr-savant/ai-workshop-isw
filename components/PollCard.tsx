@@ -80,6 +80,8 @@ export default function PollCard({ pollId, question, options }: PollCardProps) {
 
   const total = results?.total ?? 0;
 
+  const hasVoted = voted !== null;
+
   return (
     <div className="poll-card">
       <p className="poll-question">{question}</p>
@@ -92,32 +94,33 @@ export default function PollCard({ pollId, question, options }: PollCardProps) {
           return (
             <button
               key={i}
-              className={`poll-option${isVoted ? " voted" : ""}`}
-              onClick={() => castVote(i)}
-              disabled={loading}
+              className={`poll-option${isVoted ? " voted" : ""}${hasVoted ? " has-voted" : ""}`}
+              onClick={() => !hasVoted && castVote(i)}
+              disabled={loading || hasVoted}
             >
               <div className="poll-option-top">
                 <span className="poll-option-label">
                   {opt.emoji && <span className="poll-emoji">{opt.emoji}</span>}
                   {opt.label}
                 </span>
-                <span className="poll-pct">{total > 0 ? `${pct}%` : "—"}</span>
+                {hasVoted && (
+                  <span className="poll-pct">{`${pct}%`}</span>
+                )}
               </div>
-              <div className="poll-bar-track">
-                <div
-                  className="poll-bar-fill"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
+              {hasVoted && (
+                <div className="poll-bar-track">
+                  <div className="poll-bar-fill" style={{ width: `${pct}%` }} />
+                </div>
+              )}
             </button>
           );
         })}
       </div>
       <div className="poll-meta">
-        {total === 0
-          ? "0 responses"
-          : `${total} ${total === 1 ? "response" : "responses"}`}
-        {voted !== null && <span className="poll-voted-badge">✓ Your vote is in</span>}
+        {hasVoted
+          ? `${total} ${total === 1 ? "response" : "responses"}`
+          : "Tap an option to vote"}
+        {hasVoted && <span className="poll-voted-badge">✓ Your vote is in</span>}
       </div>
     </div>
   );

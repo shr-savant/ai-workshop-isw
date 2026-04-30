@@ -128,8 +128,9 @@ export default function HubPage() {
           text-align: left;
           transition: border-color 0.15s, background 0.15s;
         }
-        .poll-option:hover { border-color: var(--blue); background: var(--blue-bg); }
+        .poll-option:hover:not(.has-voted) { border-color: var(--blue); background: var(--blue-bg); }
         .poll-option.voted { border-color: var(--blue); background: var(--blue-bg); }
+        .poll-option.has-voted { cursor: default; }
         .poll-option-top {
           display: flex;
           justify-content: space-between;
