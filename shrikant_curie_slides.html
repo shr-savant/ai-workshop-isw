@@ -514,6 +514,33 @@ body {
 
 .intensity-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
 .intensity-val { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+
+/* ══════════════════════════════════
+   MOBILE
+══════════════════════════════════ */
+@media (max-width: 640px) {
+  .slide { padding: 1.5rem 1.25rem; }
+  .slide.layout-split { flex-direction: column; gap: 1.25rem; }
+  .slide.layout-top { padding-top: 1.5rem; }
+
+  /* Nav bar: hide decorative text, enlarge touch targets */
+  .nav-bar { padding: 0 0.75rem; gap: 0.5rem; }
+  .nav-left { display: none; }
+  .nav-hint { display: none; }
+  .nav-btn  { width: 42px; height: 42px; font-size: 18px; }
+  .slide-counter { min-width: 40px; font-size: 11px; }
+  .nav-script-link { font-size: 10px; padding: 4px 8px; }
+
+  /* Content layout */
+  .ba-grid      { grid-template-columns: 1fr; }
+  .status-item  { font-size: clamp(1rem, 4vw, 1.4rem); }
+  .status-icon  { width: 36px; height: 36px; }
+  .stat-row     { gap: 1rem; }
+  .insight-row  { flex-direction: column; }
+  .organ-chips  { gap: 8px; }
+  .intensity-grid { gap: 8px; }
+  .intensity-item { min-width: 80px; }
+}
 </style>
 </head>
 <body>
@@ -539,24 +566,14 @@ body {
   </section>
 
   <!-- ══ SLIDE 2 — THE PROBLEM ══ -->
-  <section class="slide layout-split" id="s2">
-    <div class="split-text">
-      <div class="slide-label">The Problem</div>
-      <div class="slide-title">An MRI scan is not<br><span class="accent">one image.</span></div>
-      <div class="slide-body">
-        It's a stack of hundreds of cross-sectional slices. Black and white. Flat.<br><br>
-        A radiologist can read them. But a surgeon planning to remove a tumour surrounded by blood vessels, nerves, and bone? They study each slice one by one — <strong>mentally assembling a 3D picture that only exists in their head.</strong><br><br>
-        Every patient. Every surgery. No exceptions.
-      </div>
+  <section class="slide layout-top" id="s2">
+    <div class="slide-label">The Problem</div>
+    <div class="slide-title">An MRI scan is not<br><span class="accent">one image.</span></div>
+    <div class="slide-body">
+      It's a stack of hundreds of cross-sectional slices. Black and white. Flat.<br><br>
+      A radiologist can read them. But a surgeon planning to remove a tumour surrounded by blood vessels, nerves, and bone? They study each slice one by one — <strong>mentally assembling a 3D picture that only exists in their head.</strong>
     </div>
-    <div class="split-media">
-      <div class="placeholder placeholder-lg">
-        <div class="ph-icon">🩻</div>
-        <div class="ph-type">Image</div>
-        <div class="ph-instruction">Grid of MRI scan slices — black &amp; white, cross-sectional views</div>
-        <div class="ph-code">&lt;img src="mri-slices-grid.jpg" alt="..."&gt;</div>
-      </div>
-    </div>
+    <img src="mri-slices-grid.jpg.png" alt="Grid of MRI scan slices — black and white cross-sectional views" style="width:100%; max-height:42vh; object-fit:cover; border-radius:14px; margin-top:1.5rem;">
   </section>
 
   <!-- ══ SLIDE 3 — SEGMENTATION (THE HIDDEN BURDEN) ══ -->
@@ -592,13 +609,8 @@ body {
           <span class="tag tag-white">curiemedical.com</span>
         </div>
       </div>
-      <div style="flex:1; min-width:280px; max-width:440px">
-        <div class="placeholder placeholder-lg">
-          <div class="ph-icon">▶</div>
-          <div class="ph-type">Video</div>
-          <div class="ph-instruction">Alice demo — rotating 3D anatomy model from curiemedical.com</div>
-          <div class="ph-code">&lt;video src="alice-demo.mp4" controls autoplay muted loop&gt;</div>
-        </div>
+      <div style="flex:1; min-width:280px; max-width:440px; display:flex; align-items:center;">
+        <img src="segmentation-2.gif" alt="Alice demo — rotating 3D anatomy model" style="width:100%; max-height:35vh; object-fit:contain; border-radius:14px;">
       </div>
     </div>
   </section>
@@ -610,19 +622,11 @@ body {
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; flex:1;">
       <div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Before Alice</div>
-        <div class="placeholder" style="height:100%; min-height:240px;">
-          <div class="ph-icon">🩻</div>
-          <div class="ph-type">Image</div>
-          <div class="ph-instruction">Flat 2D MRI slice — black &amp; white cross-section</div>
-        </div>
+        <img src="mri-stack.png" alt="Flat 2D MRI slice stack — black and white cross-sections" style="width:100%; max-height:38vh; border-radius:14px; object-fit:contain;">
       </div>
       <div>
         <div style="font-family:var(--mono);font-size:10px;color:var(--teal-lt);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">With Alice</div>
-        <div class="placeholder" style="height:100%; min-height:240px; border-color:rgba(52,211,153,0.35);">
-          <div class="ph-icon">🫀</div>
-          <div class="ph-type" style="background:rgba(5,150,105,0.15); border-color:rgba(52,211,153,0.3); color:var(--teal-lt);">Image / Video</div>
-          <div class="ph-instruction">3D anatomy model from Alice — rotatable, full colour</div>
-        </div>
+        <img src="3d-color.png" alt="3D colour-coded anatomy model from Alice" style="width:100%; border-radius:14px; object-fit:contain;">
       </div>
     </div>
   </section>
@@ -685,25 +689,20 @@ body {
   </section>
 
   <!-- ══ SLIDE 8 — SEGMENTATION RESULT ══ -->
-  <section class="slide layout-split" id="s8">
-    <div class="split-text">
-      <div class="slide-label">The Result</div>
-      <div class="slide-title">Each organ,<br><span class="accent-teal">automatically<br>labelled.</span></div>
-      <div class="slide-body" style="margin-bottom:1.5rem">Now the surgeon doesn't just get a 3D model. They get a model where every structure is <strong>a separate, isolatable group.</strong></div>
-      <div class="organ-chips" style="flex-direction:column; gap:8px;">
+  <section class="slide layout-top" id="s8">
+    <div style="display:flex; align-items:flex-start; gap:2rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+      <div>
+        <div class="slide-label">The Result</div>
+        <div class="slide-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem); margin-bottom:0.4rem;">Each organ,<br><span class="accent-teal">automatically labelled.</span></div>
+        <div class="slide-body" style="margin-bottom:0">Now the surgeon doesn't just get a 3D model. They get a model where every structure is <strong>a separate, isolatable group.</strong></div>
+      </div>
+      <div class="organ-chips" style="flex-direction:row; gap:6px; margin:0; align-self:center;">
         <div class="organ-chip"><div class="organ-dot" style="background:#f87171"></div>Isolate the tumour</div>
         <div class="organ-chip"><div class="organ-dot" style="background:#60a5fa"></div>Show the vascular system</div>
         <div class="organ-chip"><div class="organ-dot" style="background:#fbbf24"></div>Hide the bone, see underneath</div>
       </div>
     </div>
-    <div class="split-media">
-      <div class="placeholder placeholder-lg" style="border-color:rgba(52,211,153,0.35);">
-        <div class="ph-icon">🎨</div>
-        <div class="ph-type" style="background:rgba(5,150,105,0.15); border-color:rgba(52,211,153,0.3); color:var(--teal-lt);">Video / Image</div>
-        <div class="ph-instruction">Segmented 3D model with colour-coded organs — tumour, vessels, bone each in separate groups</div>
-        <div class="ph-code">&lt;video src="segmentation-demo.mp4" controls&gt;</div>
-      </div>
-    </div>
+    <img src="alice-demo.gif" alt="Segmented 3D model with colour-coded organs" style="width:100%; max-height:45vh; object-fit:contain; border-radius:14px;">
   </section>
 
   <!-- ══ SLIDE 9 — BEFORE vs AFTER ══ -->

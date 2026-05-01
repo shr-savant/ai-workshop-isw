@@ -55,7 +55,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  height: 46px;
+  min-height: 46px;
+  height: auto;
+}
+@media (max-width: 600px) {
+  .site-nav { flex-wrap: wrap; padding: 6px 1rem; gap: 4px 8px; }
+  .site-nav-brand { display: none; }
 }
 .site-nav-brand {
   font-family: var(--mono);
@@ -163,50 +168,6 @@ body {
 
 /* ── MAIN ── */
 .main { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
-/* ── API KEY SETUP ── */
-.setup-banner {
-  background: var(--amber-lt);
-  border: 1px solid var(--amber-bd);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.setup-banner.hidden { display: none; }
-.setup-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
-.setup-text { flex: 1; min-width: 180px; }
-.setup-text strong { font-size: 13px; color: var(--amber-dk); display: block; margin-bottom: 2px; }
-.setup-text span { font-size: 12px; color: var(--text-2); }
-.setup-input-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
-.setup-input {
-  flex: 1; min-width: 200px;
-  padding: 7px 12px;
-  border: 1px solid var(--amber-bd);
-  border-radius: 7px;
-  font-size: 13px;
-  font-family: monospace;
-  background: white;
-  color: var(--text);
-  outline: none;
-}
-.setup-input:focus { border-color: var(--amber); }
-.setup-btn {
-  padding: 7px 16px;
-  background: var(--amber);
-  color: white;
-  border: none;
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.setup-btn:hover { background: #b45309; }
 
 /* ── INPUT SECTION ── */
 .input-section {
@@ -680,18 +641,6 @@ body {
 
 <main class="main">
 
-  <div class="setup-banner" id="setupBanner">
-    <span class="setup-icon">🔑</span>
-    <div class="setup-text">
-      <strong>Add your Claude API key to generate recipes</strong>
-      <span>Stored only in your browser — never shared anywhere.</span>
-      <div class="setup-input-row">
-        <input class="setup-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-…" />
-        <button class="setup-btn" onclick="saveApiKey()">Save Key</button>
-      </div>
-    </div>
-  </div>
-
   <div class="input-section">
     <div class="input-label">What would you like to cook?</div>
     <div class="input-hint">Try "my mom's chicken biryani", "quick pasta carbonara", or "chocolate chip cookies"</div>
@@ -804,33 +753,12 @@ body {
 <script>
 let currentRecipe = null;
 
-// ── API Key ──
-function saveApiKey() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('sk-')) { alert('Please enter a valid Claude API key (starts with sk-).'); return; }
-  localStorage.setItem('claude_api_key', key);
-  document.getElementById('setupBanner').classList.add('hidden');
-}
-
-function checkApiKey() {
-  if (localStorage.getItem('claude_api_key')) {
-    document.getElementById('setupBanner').classList.add('hidden');
-  }
-}
-
 // ── Generate ──
 async function generateRecipe() {
   const input    = document.getElementById('recipeInput').value.trim();
   const servings = document.getElementById('servingsInput').value;
   const dietary  = document.getElementById('dietaryInput').value;
   if (!input) return;
-
-  const apiKey = localStorage.getItem('claude_api_key');
-  if (!apiKey) {
-    document.getElementById('setupBanner').classList.remove('hidden');
-    document.getElementById('apiKeyInput').focus();
-    return;
-  }
 
   setLoading(true);
   document.getElementById('recipeCard').classList.remove('visible');
@@ -858,14 +786,9 @@ Reply with ONLY a JSON object — no markdown, no explanation:
 Include 6–12 ingredients, 5–8 steps, and 2–3 tips.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/claude', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
@@ -1030,7 +953,6 @@ function setLoading(show) {
   btn.innerHTML = show ? 'Generating…' : '<span>✨</span> Generate Recipe';
 }
 
-checkApiKey();
 loadCollection();
 </script>
 </body>
