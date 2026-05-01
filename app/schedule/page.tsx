@@ -26,7 +26,7 @@ const SCHEDULE = [
     duration: "6 min",
     segment: "His AI journey — a different entry point",
     speaker: "sri",
-    speakerLabel: "Srikanth",
+    speakerLabel: "Shrikant",
     notes: "Entrepreneur perspective: small-business use, not Big Tech.",
   },
   {
@@ -51,7 +51,7 @@ const SCHEDULE = [
     duration: "5 min",
     segment: "Business case study — entrepreneur AI in action",
     speaker: "sri",
-    speakerLabel: "Srikanth",
+    speakerLabel: "Shrikant",
     notes: "Social media captions + customer email templates.",
   },
   {
@@ -66,7 +66,7 @@ const SCHEDULE = [
   {
     time: "0:42",
     duration: "5 min",
-    segment: "The 85/15 principle — Rik frames, Srikanth extends",
+    segment: "The 85/15 principle — Rik frames, Shrikant extends",
     speaker: "both",
     speakerLabel: "Both",
     notes: "AI does 85% of the lifting. Your irreplaceable 15% = context, judgment, relationships.",
@@ -118,7 +118,7 @@ export default function SchedulePage() {
         <div className="schedule-inner schedule-legend-inner">
           {[
             { cls: "rik", label: "Rik" },
-            { cls: "sri", label: "Srikanth" },
+            { cls: "sri", label: "Shrikant" },
             { cls: "both", label: "Both" },
             { cls: "tryon", label: "Hands-on" },
           ].map(({ cls, label }) => (
@@ -165,7 +165,7 @@ export default function SchedulePage() {
             <div className="breakdown-grid">
               {[
                 { cls: "rik", label: "Rik", pct: "28%", mins: "17 min" },
-                { cls: "sri", label: "Srikanth", pct: "28%", mins: "17 min" },
+                { cls: "sri", label: "Shrikant", pct: "28%", mins: "17 min" },
                 { cls: "both", label: "Both together", pct: "17%", mins: "10 min" },
                 { cls: "tryon", label: "Audience try-ons", pct: "35%", mins: "21 min" },
               ].map(({ cls, label, pct, mins }) => (

@@ -68,7 +68,7 @@ export default function KitPage() {
             </div>
             <div className="spk-chip spk-sri">
               <div className="spk-av av-s">SS</div>
-              Srikanth Savant · AI Builder
+              Shrikant Savant · AI Builder
             </div>
           </div>
         </div>
