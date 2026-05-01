@@ -10,8 +10,7 @@ const links = [
   { href: "/playbook.html",               label: "📖 Playbook" },
   { href: "/playground",                  label: "🧪 Playground" },
   { href: "/prompts",                     label: "📚 Prompts" },
-  { href: "/schedule.html",               label: "🗓 Schedule" },
-  { href: "/shrikant_curie_medical.html", label: "🏥 Curie Medical" },
+{ href: "/shrikant_curie_medical.html", label: "🏥 Curie Medical" },
   { href: "/recipe_keeper.html",          label: "🍳 Recipe Keeper" },
 ];
 
