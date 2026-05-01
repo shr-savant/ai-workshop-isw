@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PollCard from "@/components/PollCard";
+import PollResults from "@/components/PollResults";
 import ChatPanel from "@/components/ChatPanel";
 
 const POLL1 = {
@@ -34,7 +35,7 @@ const QUICK_QUESTIONS = [
   "What's the difference between ChatGPT and Claude?",
 ];
 
-type Tab = "poll" | "poll2" | "qa";
+type Tab = "poll" | "poll2" | "results" | "qa";
 
 export default function HubTabs() {
   const [active, setActive] = useState<Tab>("poll");
@@ -55,6 +56,12 @@ export default function HubTabs() {
           onClick={() => setActive("poll2")}
         >
           <span className="tab-icon">🎯</span> Mid-Session Poll
+        </button>
+        <button
+          className={`tab-btn${active === "results" ? " active" : ""}`}
+          onClick={() => setActive("results")}
+        >
+          <span className="tab-icon">📊</span> Live Results
         </button>
         <button
           className={`tab-btn${active === "qa" ? " active" : ""}`}
@@ -83,6 +90,12 @@ export default function HubTabs() {
               question={POLL2.question}
               options={POLL2.options}
             />
+          </div>
+        )}
+
+        {active === "results" && (
+          <div className="tab-panel">
+            <PollResults />
           </div>
         )}
 
