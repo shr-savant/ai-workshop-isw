@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Making AI Work For You · LEAP 2026 AI Workshop</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --ink:       #0f172a;
+  --paper:     #f8fafc;
+  --surface:   #ffffff;
+  --border:    #e2e8f0;
+  --muted:     #64748b;
+  --hint:      #94a3b8;
+  --blue:      #2563eb;
+  --blue-bg:   #eff6ff;
+  --blue-bd:   #bfdbfe;
+  --teal:      #059669;
+  --teal-bg:   #ecfdf5;
+  --teal-bd:   #a7f3d0;
+  --amber:     #b45309;
+  --amber-bg:  #fffbeb;
+  --amber-bd:  #fde68a;
+  --purple:    #5b21b6;
+  --purple-bg: #f5f3ff;
+  --purple-bd: #ddd6fe;
+  --cyan-bg:   #ecfeff;
+  --cyan-bd:   #a5f3fc;
+  --mono:      'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ── Nav ── */
+.site-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem; height: 3.25rem;
+  gap: 1rem;
+}
+.site-nav-brand {
+  font-family: 'Sora', sans-serif; font-size: 0.875rem;
+  font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.site-nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+.site-nav-link {
+  font-size: 0.8125rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; padding: 0.375rem 0.625rem;
+  border-radius: 6px; transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.site-nav-link:hover { background: var(--paper); color: var(--ink); }
+.site-nav-link.current { background: var(--blue-bg); color: var(--blue); }
+
+/* ── Hero (matches kit page) ── */
+.kit-hero {
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #0d2137 100%);
+  color: #fff;
+  padding: 3.5rem 1.5rem 3rem;
+  text-align: center;
+}
+.kit-hero-inner { max-width: 700px; margin: 0 auto; }
+.kit-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px; padding: 0.375rem 1rem;
+  font-size: 0.75rem; letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.7); margin-bottom: 1.5rem;
+}
+.eyebrow-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: #38bdf8;
+}
+.kit-title {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 800; line-height: 1.15;
+  margin: 0 0 1rem; letter-spacing: -0.02em;
+}
+.kit-title em { font-style: italic; color: #38bdf8; }
+.kit-sub {
+  color: rgba(255,255,255,0.65);
+  font-size: 1rem; line-height: 1.6; margin: 0 0 2rem;
+}
+.speakers-row { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+.spk-chip {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 0.875rem; border-radius: 100px;
+  font-size: 0.8125rem; font-weight: 500; border: 1px solid;
+}
+.spk-rik { background: rgba(37,99,235,0.2); border-color: rgba(37,99,235,0.4); color: #93c5fd; }
+.spk-sri { background: rgba(8,145,178,0.2); border-color: rgba(8,145,178,0.4); color: #67e8f9; }
+.spk-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.625rem; font-weight: 700; font-family: 'Sora', sans-serif;
+}
+.av-r { background: #2563eb; color: #fff; }
+.av-s { background: #0891b2; color: #fff; }
+
+/* ── Principle bar (matches kit) ── */
+.principle-bar {
+  display: flex; align-items: center; gap: 1.5rem;
+  background: #0f172a; color: #fff;
+  padding: 1.125rem 2rem; flex-wrap: wrap;
+}
+.principle-ratio {
+  font-family: 'Sora', sans-serif; font-size: 1.75rem;
+  font-weight: 800; color: #38bdf8; white-space: nowrap; letter-spacing: -0.02em;
+}
+.principle-divider { width: 1px; height: 2.5rem; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+.principle-text { font-size: 0.875rem; line-height: 1.6; color: rgba(255,255,255,0.8); }
+.principle-text strong { color: #fff; }
+
+/* ── Header note ── */
+.header-note-wrap { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; }
+.header-note {
+  display: flex; gap: 0.75rem; align-items: flex-start;
+  background: var(--blue-bg); border: 1px solid var(--blue-bd);
+  border-radius: 10px; padding: 0.875rem 1rem;
+  font-size: 0.875rem; color: var(--ink);
+  max-width: 760px; margin: 0 auto; line-height: 1.55;
+}
+.header-note-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.header-note a { color: var(--blue); font-weight: 600; text-decoration: underline; }
+
+/* ── Main content ── */
+.page-main { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 6rem; }
+
+/* ── Section ── */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.5rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.175rem; font-weight: 700; color: var(--ink);
+}
+.time-badge {
+  font-size: 0.75rem; font-weight: 600; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 100px; padding: 0.25rem 0.75rem; white-space: nowrap;
+}
+
+/* ── Four-part blocks ── */
+.block { margin-bottom: 1.125rem; }
+.block-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--hint); margin-bottom: 0.375rem;
+}
+.block-body { font-size: 0.9375rem; color: var(--muted); line-height: 1.65; }
+.block-body strong { color: var(--ink); }
+
+/* ── Try it block ── */
+.try-block {
+  background: var(--teal-bg); border: 1px solid var(--teal-bd);
+  border-radius: 12px; padding: 1.125rem; margin-bottom: 1.125rem;
+}
+.try-block-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem;
+}
+.try-instruction {
+  font-size: 0.875rem; color: var(--teal); font-weight: 500;
+  margin-bottom: 0.875rem; line-height: 1.5;
+}
+.try-link {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.8125rem; font-weight: 600; color: var(--blue);
+  text-decoration: none; background: var(--blue-bg);
+  border: 1px solid var(--blue-bd); border-radius: 6px;
+  padding: 0.3rem 0.75rem; margin-bottom: 0.875rem;
+  transition: background 0.15s;
+}
+.try-link:hover { background: var(--blue-bd); }
+
+/* ── Prompt cards ── */
+.prompt-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden;
+}
+.prompt-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem 0.875rem; background: var(--paper);
+  border-bottom: 1px solid var(--border);
+}
+.prompt-card-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.label-vague   { color: #dc2626; }
+.label-briefed { color: var(--teal); }
+.label-neutral { color: var(--muted); }
+.copy-btn {
+  font-size: 0.75rem; font-weight: 600; color: var(--muted);
+  background: none; border: 1px solid var(--border);
+  border-radius: 5px; padding: 0.2rem 0.6rem; cursor: pointer;
+  transition: background 0.15s, color 0.15s; white-space: nowrap;
+}
+.copy-btn:hover { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-bd); }
+.copy-btn.copied { background: var(--teal-bg); color: var(--teal); border-color: var(--teal-bd); }
+.prompt-card-body {
+  padding: 0.875rem; font-family: var(--mono); font-size: 0.8rem;
+  line-height: 1.7; color: var(--ink); white-space: pre-wrap; word-break: break-word;
+}
+
+/* ── Small note ── */
+.small-note {
+  display: flex; gap: 0.5rem; align-items: flex-start;
+  font-size: 0.8125rem; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.75rem; margin-top: 0.75rem;
+}
+.small-note-icon { flex-shrink: 0; }
+
+/* ── What's next ── */
+.whats-next {
+  font-size: 0.875rem; color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem; margin-top: 0.75rem; font-style: italic;
+}
+.whats-next::before { content: "→ "; color: var(--blue); font-style: normal; font-weight: 600; }
+
+/* ── Sub-section ── */
+.subsection { margin-top: 1.375rem; }
+.subsection-title {
+  font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 0.625rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.subsection-label {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  background: var(--paper); border: 1px solid var(--border);
+  border-radius: 4px; padding: 0.15rem 0.5rem;
+}
+
+/* ── Comparison table ── */
+.compare-wrap { overflow-x: auto; margin-top: 1rem; }
+.compare-table {
+  width: 100%; border-collapse: collapse; font-size: 0.875rem;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden; min-width: 320px;
+}
+.compare-table th {
+  text-align: left; padding: 0.625rem 0.875rem;
+  background: var(--paper); font-weight: 600; color: var(--muted);
+  font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.compare-table td {
+  padding: 0.625rem 0.875rem; border-bottom: 1px solid var(--border);
+  color: var(--ink); vertical-align: top;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table td:first-child { color: var(--muted); font-weight: 500; }
+
+/* ── Folder diagram ── */
+.folder-block {
+  background: #0f172a; border-radius: 10px;
+  padding: 1.25rem 1.5rem; font-family: var(--mono);
+  font-size: 0.8rem; line-height: 2; color: #94a3b8;
+  margin-bottom: 0.75rem; overflow-x: auto;
+}
+.folder-block .dir { color: #7dd3fc; }
+.folder-block .file { color: #e2e8f0; }
+.folder-block .comment { color: #475569; }
+
+/* ── 4-week plan ── */
+.week-plan {
+  background: var(--purple-bg); border: 1px solid var(--purple-bd);
+  border-radius: 12px; padding: 1.25rem; margin-top: 1rem;
+}
+.week-plan-title {
+  font-family: 'Sora', sans-serif; font-size: 0.875rem;
+  font-weight: 700; color: var(--purple); margin-bottom: 1rem; letter-spacing: 0.02em;
+}
+.week-row { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 0.75rem; }
+.week-row:last-child { margin-bottom: 0; }
+.week-badge {
+  font-size: 0.6875rem; font-weight: 700; color: var(--purple);
+  background: var(--surface); border: 1px solid var(--purple-bd);
+  border-radius: 100px; padding: 0.2rem 0.6rem; white-space: nowrap;
+  flex-shrink: 0; margin-top: 2px;
+}
+.week-text { font-size: 0.875rem; color: var(--ink); }
+.week-text em { color: var(--muted); font-style: normal; display: block; font-size: 0.8125rem; margin-top: 0.125rem; }
+
+/* ── Closing callout ── */
+.closing-callout {
+  background: var(--ink); border-radius: 16px;
+  padding: 2.5rem 1.5rem; text-align: center; margin-top: 2.5rem;
+}
+.closing-quote {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  font-weight: 700; color: #f1f5f9; line-height: 1.5; margin-bottom: 0.75rem;
+}
+.closing-quote span { color: #7dd3fc; }
+.closing-sub { font-size: 0.875rem; color: #64748b; }
+
+/* ── References ── */
+.refs { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+.refs-title {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--hint); margin-bottom: 0.875rem;
+}
+.ref-link {
+  display: block; font-size: 0.875rem; color: var(--blue);
+  text-decoration: none; margin-bottom: 0.5rem; transition: color 0.15s;
+}
+.ref-link:hover { color: var(--ink); text-decoration: underline; }
+.ref-link span { color: var(--muted); font-size: 0.8125rem; margin-left: 0.375rem; }
+
+/* ── Divider ── */
+.section-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.75rem 0; color: var(--hint); font-size: 0.75rem;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .site-nav { padding: 0 1rem; }
+  .site-nav-brand { font-size: 0.75rem; }
+  .site-nav-link { font-size: 0.7rem; padding: 0.3rem 0.4rem; }
+
+  .kit-hero { padding: 2.5rem 1rem 2rem; }
+  .principle-bar { padding: 1rem 1.25rem; gap: 0.875rem; }
+  .principle-divider { display: none; }
+  .principle-ratio { font-size: 1.375rem; }
+
+  .header-note-wrap { padding: 1rem; }
+
+  .page-main { padding: 1.5rem 1rem 5rem; }
+  .section { padding: 1.25rem; border-radius: 12px; }
+  .section-title { font-size: 1.05rem; }
+
+  .prompt-card-body { font-size: 0.75rem; }
+  .folder-block { font-size: 0.72rem; padding: 1rem; }
+
+  .week-row { flex-direction: column; gap: 0.375rem; }
+  .week-badge { align-self: flex-start; }
+
+  .closing-callout { padding: 2rem 1.25rem; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .page-main { padding: 2rem 1.5rem 5rem; }
+  .section { padding: 1.5rem; }
+}
+
+  /* ── Mobile nav ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; gap: 5px;
+    width: 36px; height: 36px; padding: 6px;
+    background: none; border: 1px solid #e2e8f0;
+    border-radius: 8px; cursor: pointer; flex-shrink: 0;
+  }
+  .nav-hamburger span {
+    display: block; height: 2px; background: #0f172a;
+    border-radius: 2px; transition: transform 0.2s, opacity 0.2s;
+  }
+  .nav-hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu {
+    display: none; position: absolute; top: 3.25rem; left: 0; right: 0;
+    background: #fff; border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    flex-direction: column; padding: 0.5rem 0; z-index: 49;
+  }
+  .mobile-link {
+    display: block; padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem; font-weight: 500;
+    color: #0f172a; text-decoration: none;
+    transition: background 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .mobile-link:hover { background: #f8fafc; }
+  .mobile-link.current { color: #2563eb; background: #eff6ff; border-left-color: #2563eb; }
+  @media (max-width: 768px) {
+    .site-nav-links { display: none !important; }
+    .nav-hamburger { display: flex !important; }
+    .mobile-menu.is-open { display: flex; }
+  }
+
+/* ── Advanced badge ── */
+.advanced-badge {
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--purple);
+  background: var(--purple-bg); border: 1px solid var(--purple-bd);
+  border-radius: 100px; padding: 0.2rem 0.65rem; margin-left: 0.5rem;
+  vertical-align: middle;
+}
+/* ── Callout block ── */
+.callout-block {
+  border-left: 3px solid var(--purple-bd); background: var(--purple-bg);
+  border-radius: 0 8px 8px 0; padding: 0.875rem 1.125rem;
+  font-size: 0.9375rem; font-style: italic; color: var(--ink);
+  margin: 1.125rem 0; line-height: 1.6;
+}
+/* ── Context list ── */
+.context-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin: 0.875rem 0; }
+.context-list li { display: flex; align-items: flex-start; gap: 0.625rem; font-size: 0.9375rem; color: var(--ink); line-height: 1.5; }
+.context-list li span:first-child { font-size: 1.125rem; flex-shrink: 0; margin-top: 1px; }
+/* ── Four-move grid ── */
+.moves-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.125rem 0; }
+.move-card { border-radius: 10px; padding: 1.125rem; border: 1px solid; }
+.move-write    { background: var(--blue-bg);   border-color: var(--blue-bd); }
+.move-select   { background: var(--teal-bg);   border-color: var(--teal-bd); }
+.move-compress { background: var(--purple-bg); border-color: var(--purple-bd); }
+.move-isolate  { background: var(--amber-bg);  border-color: var(--amber-bd); }
+.move-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.9375rem; margin-bottom: 0.5rem; color: var(--ink); }
+.move-detail { font-size: 0.8125rem; color: var(--muted); line-height: 1.6; }
+.move-detail strong { color: var(--ink); }
+/* ── Habit list ── */
+.habit-list { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; margin: 0.875rem 0; }
+.habit-list li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9375rem; color: var(--ink); line-height: 1.55; }
+.habit-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700;
+  color: var(--teal); background: var(--teal-bg); border: 1px solid var(--teal-bd);
+  border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; margin-top: 2px;
+}
+/* ── Quiz ── */
+.quiz-block { display: flex; flex-direction: column; gap: 1rem; }
+.quiz-item { background: var(--paper); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.quiz-q { padding: 0.875rem 1rem; font-size: 0.9375rem; font-weight: 500; color: var(--ink); line-height: 1.5; }
+.quiz-reveal-btn {
+  display: block; margin: 0 1rem 0.875rem; font-size: 0.8125rem; font-weight: 600;
+  color: var(--blue); background: var(--blue-bg); border: 1px solid var(--blue-bd);
+  border-radius: 6px; padding: 0.3rem 0.75rem; cursor: pointer; font-family: inherit; transition: background 0.15s;
+}
+.quiz-reveal-btn:hover { background: var(--blue-bd); }
+.quiz-answer { display: none; background: var(--teal-bg); border-top: 1px solid var(--teal-bd); padding: 0.875rem 1rem; font-size: 0.875rem; color: var(--ink); line-height: 1.6; }
+.quiz-answer.revealed { display: block; }
+.quiz-answer strong { color: var(--teal); }
+@media (max-width: 640px) { .moves-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="/hub" class="site-nav-link">🏠 Home</a>
+    <a href="/kit" class="site-nav-link">📋 AI Starter Kit</a>
+    <a href="/playbook.html" class="site-nav-link current">🛠️ Workshop</a>
+    <a href="/playground" class="site-nav-link">🧪 Playground</a>
+    <a href="/shrikant_curie_slides.html" class="site-nav-link">🏥 Curie Medical</a>
+    <a href="/recipe_keeper.html" class="site-nav-link">🍳 Recipe Keeper</a>
+  </div>
+
+<button class="nav-hamburger" onclick="toggleNav(this)" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/hub" class="mobile-link">🏠 Home</a>
+  <a href="/kit" class="mobile-link">📋 AI Starter Kit</a>
+  <a href="/playbook.html" class="mobile-link current">🛠️ Workshop</a>
+  <a href="/playground" class="mobile-link">🧪 Playground</a>
+  <a href="/shrikant_curie_slides.html" class="mobile-link">🏥 Curie Medical</a>
+  <a href="/recipe_keeper.html" class="mobile-link">🍳 Recipe Keeper</a>
+</div>
+</nav>
+
+<!-- ── Hero — matches kit page exactly ── -->
+<header class="kit-hero">
+  <div class="kit-hero-inner">
+    <div class="kit-eyebrow">
+      <span class="eyebrow-dot"></span>
+      LEAP Collective 2026 · India Society of Worcester · May 2, Shrewsbury MA
+    </div>
+    <h1 class="kit-title">Making AI Work For You</h1>
+    <p class="kit-sub">Four things to try yourself — in our Try Out section, or in your own ChatGPT or Claude. No technical background required.</p>
+    <div class="speakers-row">
+      <div class="spk-chip spk-rik">
+        <div class="spk-av av-r">RB</div>
+        Rik Banerjee · AI Builder
+      </div>
+      <div class="spk-chip spk-sri">
+        <div class="spk-av av-s">SS</div>
+        Shrikant Savant · AI Builder
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── 85/15 bar — matches kit page ── -->
+<div class="principle-bar">
+  <div class="principle-ratio">85 / 15</div>
+  <div class="principle-divider"></div>
+  <div class="principle-text">
+    <strong>AI does 85% of the heavy lifting.</strong> The other 15% — the brief, the context, the rulebook — is yours. This playbook is about owning that 15%.
+  </div>
+</div>
+
+<!-- ── Instruction note ── -->
+<div class="header-note-wrap">
+  <div class="header-note">
+    <span class="header-note-icon">📱</span>
+    <span>Open this on your phone or laptop. As you read each section, copy the example into the <a href="/playground">Try Out section</a> of this site, ChatGPT, or Claude — and see what happens.</span>
+  </div>
+</div>
+
+<!-- ── Main ── -->
+<main class="page-main">
+
+  <!-- ── Section 1 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">1. The Prompt Formula</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">A good prompt has four parts — <strong>Role, Context, Task, Format.</strong> Adding these turns vague output into useful output.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Most people get bad AI output because they give bad briefs. The formula fixes 80% of that in 30 seconds.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Paste each into the Try Out section, ChatGPT, or Claude. Compare the two outputs side by side.</p>
+      <a href="/playground" class="try-link">🧪 Open Try Out section →</a>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-vague">Vague prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Write an email to my customers about our sale.</div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-briefed">Briefed prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Role: You are a friendly local restaurant owner.
+Context: We're doing 20% off this weekend for our 5-year anniversary. Customers are regulars — families and couples for special occasions.
+Task: Write the announcement email.
+Format: Warm and personal, under 100 words, one clear call-to-action.</div>
+      </div>
+    </div>
+
+    <p class="whats-next">Once you see how much the formula helps, the next problem shows up — you don't want to retype your role and tone every single time. That's what memory solves.</p>
+  </div>
+
+  <div class="section-divider">section 2 of 4</div>
+
+  <!-- ── Section 2 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">2. Stop Repeating Yourself</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">Modern AI tools let you set <strong>who you are and how you like things written — once.</strong> Every chat after that already knows.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Re-explaining yourself in every chat is the biggest hidden time-waster in AI. Set it once, save hours every week.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Open ChatGPT or Claude. Paste this once into a new chat. Then start a fresh chat and ask anything — notice how AI already knows who you are.</p>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-label label-neutral">Memory seed prompt</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <div class="prompt-card-body">Please remember the following about me for all future conversations:
+- I am a [your role, e.g., school teacher / small business owner / parent]
+- I prefer responses that are [warm and direct / concise and practical / detailed and thorough]
+- When I ask you to write something, default to [under 200 words / no jargon / a friendly conversational tone]
+- I value [practical advice / honesty over hype / step-by-step clarity]</div>
+      </div>
+
+      <div class="small-note">
+        <span class="small-note-icon">💡</span>
+        <span>You only run this once. After that, every chat starts with this context already loaded. To check it worked: open a new chat and ask <strong>"What do you remember about me?"</strong></span>
+      </div>
+    </div>
+
+    <p class="whats-next">Memory works for you personally. But what about a project where multiple AI tools or teammates are involved? That needs a shared rulebook.</p>
+  </div>
+
+  <div class="section-divider">section 3 of 4</div>
+
+  <!-- ── Section 3 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">3. Project Rulebooks and Reusable Workflows</h2>
+      <span class="time-badge">~10 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">When you move beyond personal use into projects, two new pieces help: <strong>AGENTS.md</strong> and <strong>Skills.</strong> Both are simple text files that travel with your project.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">Memory is personal. AGENTS.md and Skills are how context travels — across tools, across teammates, across projects.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">
+        <span class="subsection-label">Part A</span>
+        AGENTS.md
+      </div>
+      <p class="block-body" style="margin-bottom:0.875rem;">Think of it as a README for AI. A single Markdown file that tells any AI tool how to work on your project. Used by 60,000+ projects on GitHub. Stewarded by the Linux Foundation as an open standard.</p>
+
+      <div class="try-block">
+        <div class="try-block-label">Try It Yourself</div>
+        <p class="try-instruction">Copy this template, fill in the blanks for any project you work on, and save it as <strong>AGENTS.md</strong> in your project folder.</p>
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span class="prompt-card-label label-neutral">AGENTS.md template</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+          </div>
+          <div class="prompt-card-body"># My Project AGENTS.md
+
+## How to work on this project
+- Always run tests before finishing: [your test command]
+- Code style: simple, readable, comments only when needed
+- Never edit files in [folder name] — that's the old system
+
+## Gotchas
+- [The thing that has tripped up every newcomer]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">
+        <span class="subsection-label">Part B</span>
+        Skills
+      </div>
+      <p class="block-body" style="margin-bottom:0.875rem;">A folder with a SKILL.md file that packages a repeatable workflow. Anthropic introduced these in October 2025. Use the same Skill across Claude.ai, Claude Code, and the API.</p>
+
+      <div class="try-block">
+        <div class="try-block-label">Try It Yourself</div>
+        <p class="try-instruction">Paste this into Claude. It becomes a reusable Skill you can trigger any time you need to write in your brand voice.</p>
+        <div class="prompt-card">
+          <div class="prompt-card-header">
+            <span class="prompt-card-label label-neutral">Brand voice Skill</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+          </div>
+          <div class="prompt-card-body">---
+name: my-brand-voice
+description: Use when writing customer emails or social posts for my
+             restaurant. Applies our voice — warm, family-oriented,
+             never pushy or marketer-y.
+---
+
+# How we write to our customers
+
+## Voice
+- Talk like a neighbor, not a marketer
+- Use first names when possible
+- Never say "valued customer" or "exclusive offer"
+
+## Structure
+1. One-line warm opener
+2. The actual point
+3. Soft call-to-action
+4. Sign off with the owner's name</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>AGENTS.md</th>
+            <th>Skills</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Scope</td><td>One per project</td><td>Many per task type</td></tr>
+          <tr><td>Loaded</td><td>Always</td><td>On demand</td></tr>
+          <tr><td>Best for</td><td>Project rules</td><td>Repeatable workflows</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="whats-next" style="margin-top:1.25rem;">Now you have all the pieces. The last step is seeing how they all fit together in a real project.</p>
+  </div>
+
+  <div class="section-divider">section 4 of 4</div>
+
+  <!-- ── Section 4 ── -->
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">4. Organizing a Real Project</h2>
+      <span class="time-badge">~5 minutes</span>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Idea</div>
+      <p class="block-body">Prompts, memory, AGENTS.md, and Skills each have their own home in a <strong>well-organized project.</strong></p>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why It Matters</div>
+      <p class="block-body">When all four work together, AI stops feeling like a clever toy and starts feeling like a teammate.</p>
+    </div>
+
+    <div class="try-block">
+      <div class="try-block-label">Try It Yourself</div>
+      <p class="try-instruction">Use this as the template for any new project where you want AI to help consistently.</p>
+      <div class="folder-block"><span class="dir">my-project/</span>
+├── <span class="file">README.md</span>          <span class="comment">← for humans</span>
+├── <span class="file">AGENTS.md</span>          <span class="comment">← for AI agents — the project rulebook</span>
+├── <span class="dir">.claude/</span>
+│   └── <span class="dir">skills/</span>
+│       ├── <span class="dir">brand-voice/</span>
+│       │   └── <span class="file">SKILL.md</span>
+│       └── <span class="dir">weekly-report/</span>
+│           └── <span class="file">SKILL.md</span>
+└── <span class="dir">src/</span>                <span class="comment">← your actual project files</span></div>
+    </div>
+
+    <div class="week-plan">
+      <div class="week-plan-title">📅 Your 4-Week Plan</div>
+      <div class="week-row">
+        <span class="week-badge">Week 1</span>
+        <div class="week-text">Master the prompt formula.<em>Use it for every AI request — Role, Context, Task, Format.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 2</span>
+        <div class="week-text">Run the memory seed prompt once.<em>Set it in ChatGPT and Claude. Then forget about it.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 3</span>
+        <div class="week-text">Write one Skill for a task you do every week.<em>Pick something repetitive — a weekly email, a report, a social post.</em></div>
+      </div>
+      <div class="week-row">
+        <span class="week-badge">Week 4</span>
+        <div class="week-text">If you have a real project, add an AGENTS.md.<em>Even one rule is enough to start.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 5: Context Engineering ── -->
+  <div class="section-divider">going deeper</div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">5. Context Engineering — Going Deeper <span class="advanced-badge">Advanced · Optional</span></h2>
+      <span class="time-badge">Optional · ~10 min</span>
+    </div>
+
+    <p class="block-body" style="margin-bottom:0.75rem;">If you're already comfortable with prompts, memory, and Skills — this is the next idea worth understanding.</p>
+
+    <p class="block-body" style="margin-bottom:0;">Most people think the secret to better AI is a better prompt. The people who actually build with AI for a living think differently. They treat context — everything the AI sees before it answers — as a system they design, not a sentence they type. It has a name now: <strong>context engineering.</strong></p>
+
+    <div class="callout-block">"Prompt engineering was the 2023–2024 phase. Reliability comes from the context system, not from clever wording."</div>
+
+    <!-- Part A -->
+    <div class="subsection">
+      <div class="subsection-title">What "context" really means</div>
+      <p class="block-body">Context is everything inside the AI's view at the moment you ask. It's not just your latest message. It includes:</p>
+      <ul class="context-list">
+        <li><span>⚙️</span><span>The system instructions that shape the AI's role and tone</span></li>
+        <li><span>💬</span><span>Your conversation history with this AI in this session</span></li>
+        <li><span>📄</span><span>Files, documents, or images you've shared</span></li>
+        <li><span>🧠</span><span>Memory and saved preferences you've set up</span></li>
+        <li><span>🔍</span><span>Tool outputs, search results, or retrieved data</span></li>
+      </ul>
+      <div class="small-note">
+        <span>💡</span>
+        <span><strong>The takeaway:</strong> Better AI is rarely about smarter prompts. It's almost always about cleaner, more relevant context.</span>
+      </div>
+    </div>
+
+    <!-- Part B -->
+    <div class="subsection">
+      <div class="subsection-title">The four moves: write, select, compress, isolate</div>
+      <p class="block-body" style="margin-bottom:0;">LangChain — one of the teams building agent infrastructure for serious companies — describes context engineering as four core moves. They map neatly to how you should think about every AI interaction.</p>
+      <div class="moves-grid">
+        <div class="move-card move-write">
+          <div class="move-name">✍️ Write</div>
+          <div class="move-detail">
+            <strong>The idea:</strong> Save useful context outside the conversation so it survives between sessions.<br>
+            <strong>In practice:</strong> Memory features, Skills, AGENTS.md, project notes.<br>
+            <strong>Why it matters:</strong> Without writing, every chat starts from zero.
+          </div>
+        </div>
+        <div class="move-card move-select">
+          <div class="move-name">🎯 Select</div>
+          <div class="move-detail">
+            <strong>The idea:</strong> Pull only the relevant context into the AI's view at the right moment.<br>
+            <strong>In practice:</strong> Choose which files to share, which Skill to apply, which past thread to reference.<br>
+            <strong>Why it matters:</strong> AI can't filter what's useful. You have to.
+          </div>
+        </div>
+        <div class="move-card move-compress">
+          <div class="move-name">🗜️ Compress</div>
+          <div class="move-detail">
+            <strong>The idea:</strong> Summarize or trim context so the most important information stays visible.<br>
+            <strong>In practice:</strong> Ask AI to "summarize what we've decided so far" before moving on.<br>
+            <strong>Why it matters:</strong> Long context degrades AI performance — more on this below.
+          </div>
+        </div>
+        <div class="move-card move-isolate">
+          <div class="move-name">🔒 Isolate</div>
+          <div class="move-detail">
+            <strong>The idea:</strong> Use separate AI sessions for separate tasks.<br>
+            <strong>In practice:</strong> Don't draft an email, debug a problem, and plan a vacation in one chat. Open three.<br>
+            <strong>Why it matters:</strong> AI doesn't compartmentalize. Mixing topics confuses output.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part C -->
+    <div class="subsection">
+      <div class="subsection-title">Why AI gets worse the longer you chat</div>
+      <p class="block-body">You may have noticed: after 20–30 back-and-forth messages, AI starts getting things wrong. Forgetting earlier instructions. Repeating itself. Losing the thread. This isn't your imagination. Researchers have a name for it: <strong>context rot.</strong></p>
+      <div class="callout-block">In 2025, researchers at Chroma tested 18 leading AI models. Every single one degrades as context grows — even models with million-token windows. Anthropic's own research has shown that context above 100,000 tokens reduces reasoning quality.</div>
+      <div class="small-note" style="margin-bottom:0.875rem;">
+        <span>📍</span>
+        <span><strong>Lost in the Middle</strong> — Researchers at Stanford documented that AI pays the most attention to information at the very beginning or very end of context. Anything stuck in the middle is more likely to be missed — even if it's important.</span>
+      </div>
+      <p class="block-body" style="margin-bottom:0.5rem;"><strong>Three habits to fight context rot:</strong></p>
+      <ul class="habit-list">
+        <li><span class="habit-num">1</span><span>Start a new chat for a new task. Don't reuse a long thread.</span></li>
+        <li><span class="habit-num">2</span><span>Put critical instructions at the start or end of your message — never bury them in the middle.</span></li>
+        <li><span class="habit-num">3</span><span>Periodically ask AI to "summarize what we've covered so far" and start a fresh chat with that summary.</span></li>
+      </ul>
+    </div>
+
+    <!-- Part D -->
+    <div class="subsection">
+      <div class="subsection-title">From clever prompts to designed context</div>
+      <p class="block-body" style="margin-bottom:0.875rem;">The shift in how serious teams use AI is best described this way: stop treating the prompt as a magic spell. Start treating context as infrastructure.</p>
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr><th></th><th>Prompt Engineering</th><th>Context Engineering</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Era</td><td>2023 – 2024</td><td>2025 onward</td></tr>
+            <tr><td>Focus</td><td>Writing better questions</td><td>Designing better inputs</td></tr>
+            <tr><td>Reliability</td><td>Inconsistent</td><td>Repeatable</td></tr>
+            <tr><td>Skill it teaches</td><td>Word craft</td><td>Information design</td></tr>
+            <tr><td>Best for</td><td>Quick one-off tasks</td><td>Real, recurring work</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="small-note" style="margin-top:0.875rem;">
+        <span>🏆</span>
+        <span>The teams getting the most out of AI in 2026 are not the ones with the cleverest prompts. They're the ones who treat context like a product — versioned, curated, and intentional.</span>
+      </div>
+    </div>
+
+    <!-- Part E -->
+    <div class="subsection">
+      <div class="subsection-title">Test yourself — three questions</div>
+      <p class="block-body" style="margin-bottom:0.875rem;">Try answering before you reveal. The point isn't to gatekeep — it's a quick way to check the ideas landed.</p>
+      <div class="quiz-block">
+        <div class="quiz-item">
+          <div class="quiz-q">1. You've been chatting with AI for 30 messages and the answers are getting worse. What's the best move?</div>
+          <button class="quiz-reveal-btn" onclick="revealAnswer(this)">Show answer</button>
+          <div class="quiz-answer"><strong>Start a new chat.</strong> Ask AI to summarize the key decisions from the old one, then paste that summary into the fresh conversation. You get a clean context without losing anything important.</div>
+        </div>
+        <div class="quiz-item">
+          <div class="quiz-q">2. You're sharing a 50-page document with AI to ask one specific question. Where in your message should you put that question?</div>
+          <button class="quiz-reveal-btn" onclick="revealAnswer(this)">Show answer</button>
+          <div class="quiz-answer"><strong>At the very end — after the document.</strong> AI pays the most attention to the start and end of context. The middle is where information goes to be missed.</div>
+        </div>
+        <div class="quiz-item">
+          <div class="quiz-q">3. You ask AI to draft an email, then debug your spreadsheet, then plan a vacation — all in the same chat. What's wrong?</div>
+          <button class="quiz-reveal-btn" onclick="revealAnswer(this)">Show answer</button>
+          <div class="quiz-answer"><strong>You're mixing contexts.</strong> Each task bleeds into the others. Open three separate chats — one per task — and the quality of all three goes up.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section refs -->
+    <div class="subsection">
+      <div class="block-label">Dig Deeper</div>
+      <a href="https://blog.langchain.dev/context-engineering-for-agents/" target="_blank" rel="noopener" class="ref-link">LangChain — Context Engineering for Agents <span>— write, select, compress, isolate</span></a>
+      <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener" class="ref-link">Chroma Research — Context Rot (2025) <span>— 18 models tested, all degrade</span></a>
+      <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener" class="ref-link">Stanford — Lost in the Middle (Liu et al.) <span>— why buried context gets missed</span></a>
+      <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener" class="ref-link">Anthropic Prompt Engineering Guide <span>— docs.anthropic.com</span></a>
+      <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener" class="ref-link">OpenAI Tokenizer <span>— paste any text to see how many tokens it uses</span></a>
+    </div>
+  </div>
+
+  <!-- ── Closing ── -->
+  <div class="closing-callout">
+    <p class="closing-quote">"AI does <span>85%</span>. You own the <span>15%</span>.<br>The 15% is the brief, the context, the rulebook —<br>the things only you can give it."</p>
+    <p class="closing-sub">— Making AI Work For You · LEAP Collective 2026</p>
+  </div>
+
+  <!-- ── References ── -->
+  <div class="refs">
+    <div class="refs-title">References</div>
+    <a href="https://agentprotocol.ai" target="_blank" rel="noopener" class="ref-link">agents.md <span>— the official open standard (Linux Foundation)</span></a>
+    <a href="https://docs.anthropic.com/en/docs/claude-code/skills" target="_blank" rel="noopener" class="ref-link">Anthropic Agent Skills documentation <span>— docs.anthropic.com</span></a>
+    <a href="https://github.com/anthropics/claude-code-skills" target="_blank" rel="noopener" class="ref-link">Anthropic Skills GitHub repo <span>— open examples and templates</span></a>
+    <a href="https://docs.anthropic.com/en/docs/claude-code/slash-commands" target="_blank" rel="noopener" class="ref-link">Claude Code Skills documentation <span>— slash commands and custom skills</span></a>
+  </div>
+
+</main>
+
+<script>
+function revealAnswer(btn) {
+  const answer = btn.closest('.quiz-item').querySelector('.quiz-answer');
+  answer.classList.toggle('revealed');
+  btn.textContent = answer.classList.contains('revealed') ? 'Hide answer' : 'Show answer';
+}
+function copyPrompt(btn) {
+  const body = btn.closest('.prompt-card').querySelector('.prompt-card-body');
+  navigator.clipboard.writeText(body.innerText.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+
+<script>
+function toggleNav(btn) {
+  btn.classList.toggle('is-open');
+  document.getElementById('mobile-menu').classList.toggle('is-open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.site-nav')) {
+    document.querySelectorAll('.nav-hamburger').forEach(b => b.classList.remove('is-open'));
+    document.querySelectorAll('.mobile-menu').forEach(m => m.classList.remove('is-open'));
+  }
+});
+</script>
+
+</body>
+</html>

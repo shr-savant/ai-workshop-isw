@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shrikant's Intro of Rik — LEAP 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:     #0f172a;
+    --paper:   #f8fafc;
+    --surface: #ffffff;
+    --border:  #e2e8f0;
+    --muted:   #64748b;
+    --hint:    #94a3b8;
+    --blue:    #2563eb;
+    --cyan:    #0891b2;
+    --teal:    #059669;
+    --cyan-bg: #ecfeff;
+    --cyan-bd: #a5f3fc;
+    --mono:    'JetBrains Mono', monospace;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── SITE NAV ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: #060d18;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 46px;
+  }
+  .site-nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .site-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+  .site-nav-link {
+    font-size: 12px; font-weight: 500;
+    padding: 5px 12px; border-radius: 6px;
+    color: rgba(255,255,255,0.55); text-decoration: none;
+    border: 1px solid transparent; transition: all 0.15s;
+  }
+  .site-nav-link:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+  .site-nav-link.current { color: #fff; background: rgba(8,145,178,0.25); border-color: rgba(8,145,178,0.4); }
+
+  /* ── HAMBURGER & MOBILE MENU ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; gap: 5px;
+    width: 36px; height: 36px; padding: 6px;
+    background: none; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; cursor: pointer; flex-shrink: 0;
+  }
+  .nav-hamburger span {
+    display: block; height: 2px; background: rgba(255,255,255,0.8);
+    border-radius: 2px; transition: transform 0.2s, opacity 0.2s;
+  }
+  .nav-hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu {
+    display: none; position: absolute; top: 46px; left: 0; right: 0;
+    background: #060d18; border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    flex-direction: column; padding: 0.5rem 0; z-index: 49;
+  }
+  .mobile-menu.is-open { display: flex; }
+  .mobile-link {
+    display: block; padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem; font-weight: 500;
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    transition: background 0.12s; border-left: 3px solid transparent;
+  }
+  .mobile-link:hover { background: rgba(255,255,255,0.06); }
+  .mobile-link.current { color: #fff; background: rgba(8,145,178,0.2); border-left-color: #0891b2; }
+  @media (max-width: 768px) {
+    .site-nav-links { display: none !important; }
+    .nav-hamburger { display: flex !important; }
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: linear-gradient(135deg, #0d1117 0%, #0c1a2e 100%);
+    padding: 2.5rem 1.5rem 2rem;
+    color: #fff;
+  }
+  .header-inner { max-width: 720px; margin: 0 auto; }
+  .event-chip {
+    display: inline-flex; align-items: center;
+    background: rgba(8,145,178,0.15); border: 1px solid rgba(8,145,178,0.3);
+    border-radius: 100px; padding: 0.3rem 0.875rem;
+    font-size: 0.75rem; letter-spacing: 0.04em; color: #67e8f9;
+    margin-bottom: 1.25rem;
+  }
+  .page-header h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 800; line-height: 1.15;
+    margin: 0 0 0.75rem; letter-spacing: -0.02em;
+  }
+  .accent { color: #38bdf8; }
+  .page-header p { color: rgba(255,255,255,0.6); font-size: 0.9375rem; margin: 0 0 1.25rem; }
+  .meta-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .meta-pill {
+    font-size: 0.75rem; font-weight: 500;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px; padding: 0.25rem 0.75rem; color: rgba(255,255,255,0.65);
+  }
+
+  /* ── MAIN ── */
+  .page { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── CONTEXT CARD ── */
+  .context-card {
+    background: var(--cyan-bg); border: 1px solid var(--cyan-bd);
+    border-radius: 10px; padding: 0.875rem 1rem;
+    font-size: 0.875rem; color: #0e7490; line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  .context-card strong { color: #0891b2; }
+
+  /* ── SCRIPT CARD ── */
+  .script-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .script-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.875rem 1.25rem; background: var(--paper);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem;
+  }
+  .speaker-chip {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.875rem; font-weight: 600; color: var(--ink);
+  }
+  .spk-av {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #0891b2; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.625rem; font-weight: 700; font-family: 'Sora', sans-serif;
+  }
+  .time-badge {
+    font-size: 0.75rem; font-weight: 600; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 100px; padding: 0.2rem 0.65rem;
+    font-family: var(--mono);
+  }
+
+  /* ── SCRIPT TEXT ── */
+  .script-body { padding: 2rem 2rem 2.25rem; }
+  .script-text { font-size: 16px; line-height: 1.9; color: #1e293b; }
+  .script-text p { margin-bottom: 1.5rem; }
+  .script-text p:last-child { margin-bottom: 0; }
+  .script-text em { font-style: italic; color: #475569; }
+  .script-text strong { font-weight: 700; color: var(--ink); }
+
+  .pause {
+    display: inline-flex; align-items: center;
+    font-family: var(--mono); font-size: 10px;
+    color: rgba(8,145,178,0.6); background: rgba(8,145,178,0.06);
+    border: 1px solid rgba(8,145,178,0.15); border-radius: 4px;
+    padding: 1px 7px; margin: 0 4px; vertical-align: middle; white-space: nowrap;
+  }
+
+  /* ── HANDOFF NOTE ── */
+  .handoff-note {
+    margin-top: 1.75rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--muted);
+    font-family: var(--mono);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .handoff-note::before { content: '↳'; font-size: 14px; color: var(--cyan); }
+
+  /* ── FOOTER ── */
+  .site-footer { background: var(--ink); padding: 1.5rem; text-align: center; }
+  .site-footer p { font-size: 12px; color: rgba(255,255,255,0.25); font-family: var(--mono); letter-spacing: 0.04em; }
+
+  @media (max-width: 640px) {
+    .page { padding: 1.5rem 1rem 3rem; }
+    .script-body { padding: 1.25rem; }
+    .script-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <span class="site-nav-brand">LEAP 2026 · AI Workshop</span>
+  <div class="site-nav-links">
+    <a href="/hub" class="site-nav-link">🏠 Home</a>
+    <a href="/kit" class="site-nav-link">📋 AI Starter Kit</a>
+    <a href="/playbook.html" class="site-nav-link">🛠️ Workshop</a>
+    <a href="/playground" class="site-nav-link">🧪 Playground</a>
+    <a href="/shrikant_curie_slides.html" class="site-nav-link">🏥 Curie Medical</a>
+    <a href="/recipe_keeper.html" class="site-nav-link">🍳 Recipe Keeper</a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleNav(this)" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="/hub" class="mobile-link">🏠 Home</a>
+    <a href="/kit" class="mobile-link">📋 AI Starter Kit</a>
+    <a href="/playbook.html" class="mobile-link">🛠️ Workshop</a>
+    <a href="/playground" class="mobile-link">🧪 Playground</a>
+    <a href="/shrikant_curie_slides.html" class="mobile-link">🏥 Curie Medical</a>
+    <a href="/recipe_keeper.html" class="mobile-link">🍳 Recipe Keeper</a>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header class="page-header">
+  <div class="header-inner">
+    <div class="event-chip">LEAP Collective 2026 · Speaker Script</div>
+    <h1>Shrikant introduces<br><span class="accent">Rik Banerjee</span></h1>
+    <p>Opening joint intro — Shrikant's spoken introduction of his co-speaker</p>
+    <div class="meta-row">
+      <div class="meta-pill">⏱ ~1.5 min</div>
+      <div class="meta-pill">~175 words</div>
+      <div class="meta-pill">🎤 Spoken by Shrikant Savant</div>
+      <div class="meta-pill">📍 Min 0:02:30</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="page">
+
+  <div class="context-card">
+    <strong>Context:</strong> This follows immediately after Rik's intro of Shrikant (min 0:00). Shrikant now introduces Rik — not himself. No slides. The mutual intro format signals equal partnership to the audience before any content begins.
+  </div>
+
+  <div class="script-card">
+    <div class="script-head">
+      <div class="speaker-chip">
+        <div class="spk-av">SS</div>
+        Shrikant Savant · speaking
+      </div>
+      <div class="time-badge">0:02:30 → 0:05:00</div>
+    </div>
+
+    <div class="script-body">
+      <div class="script-text">
+
+        <p>Before we begin, let me introduce my co-presenter.</p>
+
+        <p>Rik Banerjee has been building AI applications both at work and outside of it. At work, he leads technology initiatives in retail, where he holds multiple patents — filed and approved — in AI and machine learning, covering <strong>computer vision</strong> and an <strong>agentic platform</strong> built for retail store colleagues. <span class="pause">pause</span></p>
+
+        <p>Outside of work, he's an active AI builder who's shipped real products in the last year — including <strong>EzyUpload</strong> and the <strong>Bazaar Protocol</strong>, an open-source project he's building for the next generation of agentic commerce — a world where AI agents transact with each other on your behalf. <span class="pause">pause</span> That's not science fiction. That's where this is heading, and Rik is building the infrastructure for it right now.</p>
+
+        <p>What I appreciate most about working with Rik on this workshop is that he doesn't talk about AI in abstractions. <span class="pause">pause</span> He builds with it every single day — and brings back what actually works for the rest of us.</p>
+
+        <p>Rik."</p>
+
+      </div>
+
+      <div class="handoff-note">Rik steps forward · Workshop content begins</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <p>LEAP Collective 2026 &nbsp;·&nbsp; India Society of Worcester &nbsp;·&nbsp; Rik Banerjee &amp; Shrikant Savant</p>
+</footer>
+
+<script>
+function toggleNav(btn) {
+  btn.classList.toggle('is-open');
+  document.getElementById('mobile-menu').classList.toggle('is-open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.site-nav')) {
+    document.querySelectorAll('.nav-hamburger').forEach(b => b.classList.remove('is-open'));
+    document.querySelectorAll('.mobile-menu').forEach(m => m.classList.remove('is-open'));
+  }
+});
+</script>
+
+</body>
+</html>
