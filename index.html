@@ -11,21 +11,22 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ink:     #0f172a;
-    --paper:   #f8fafc;
-    --surface: #ffffff;
-    --border:  #e2e8f0;
-    --muted:   #64748b;
-    --hint:    #94a3b8;
-    --blue:    #2563eb;
-    --cyan:    #0891b2;
-    --teal:    #059669;
-    --amber:   #b45309;
-    --blue-bg: #eff6ff;
-    --blue-bd: #bfdbfe;
-    --cyan-bg: #ecfeff;
-    --cyan-bd: #a5f3fc;
-    --mono:    'JetBrains Mono', monospace;
+    --ink:      #0f172a;
+    --paper:    #f8fafc;
+    --surface:  #ffffff;
+    --border:   #e2e8f0;
+    --muted:    #64748b;
+    --hint:     #94a3b8;
+    --blue:     #2563eb;
+    --cyan:     #0891b2;
+    --teal:     #059669;
+    --amber:    #d97706;
+    --blue-bg:  #eff6ff;
+    --blue-bd:  #bfdbfe;
+    --cyan-bg:  #ecfeff;
+    --cyan-bd:  #a5f3fc;
+    --purple:   #7c3aed;
+    --mono:     'JetBrains Mono', monospace;
   }
 
   html { scroll-behavior: smooth; }
@@ -690,7 +691,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 46px;
+    min-height: 46px;
+    height: auto;
+  }
+  @media (max-width: 600px) {
+    .site-nav { flex-wrap: wrap; padding: 6px 1rem; gap: 4px 8px; }
+    .site-nav-brand { display: none; }
   }
   .site-nav-brand {
     font-family: var(--mono);
@@ -702,7 +708,7 @@
   }
   .site-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
   .site-nav-link {
-    font-family: var(--sans);
+    font-family: 'Inter', system-ui, sans-serif;
     font-size: 12px;
     font-weight: 500;
     padding: 5px 12px;
@@ -924,36 +930,15 @@
 
 </main>
 
-<!-- ── FOOTER ── -->
-<footer class="site-footer">
-  <div class="footer-nav">
-    <a href="index.html" class="footer-link">🏠 Home</a>
-    <a href="ai_starter_kit.html" class="footer-link">📋 AI Starter Kit</a>
-    <a href="flyer.html" class="footer-link">📣 Flyer</a>
-    <a href="schedule.html" class="footer-link">🗓 Schedule</a>
-    <a href="recipe_keeper.html" class="footer-link">🍽 Recipe Keeper</a>
-  </div>
-  <p>
-    LEAP Collective 2026 &nbsp;·&nbsp;
-    India Society of Worcester &nbsp;·&nbsp;
-    <a href="https://iswonline.org/event-6599047">iswonline.org</a> &nbsp;·&nbsp;
-    Rik Banerjee &amp; Shrikant Savant
-  </p>
-</footer>
-
 <script>
 // ══════════════════════════════════════
 // Tab switching
 // ══════════════════════════════════════
 function showTab(id, btn) {
-  // hide all panels
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  // deactivate all tab buttons
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  // show selected panel and activate button
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  // scroll page to top of content
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -964,12 +949,11 @@ const v1 = [0,0,0,0];
 let u1 = -1;
 
 function vote1(el, idx) {
-  // deselect previous
   if (u1 >= 0) {
     document.querySelectorAll('#poll .poll-option')[u1].classList.remove('voted');
     v1[u1] = Math.max(0, v1[u1] - 1);
   }
-  if (u1 === idx) { u1 = -1; updatePoll1(); return; } // toggle off
+  if (u1 === idx) { u1 = -1; updatePoll1(); return; }
   u1 = idx;
   v1[idx]++;
   el.classList.add('voted');
@@ -1035,7 +1019,6 @@ async function sendQA() {
 
   const msgs = document.getElementById('qaMessages');
 
-  // user bubble
   const userEl = document.createElement('div');
   userEl.className = 'msg user';
   userEl.textContent = q;
@@ -1045,22 +1028,20 @@ async function sendQA() {
   input.value = '';
   btn.disabled = true;
 
-  // typing indicator
   const typingEl = document.createElement('div');
   typingEl.className = 'msg ai';
   typingEl.innerHTML = '<div class="msg-label">Workshop AI</div><div class="typing-dots"><span></span><span></span><span></span></div>';
   msgs.appendChild(typingEl);
   msgs.scrollTop = msgs.scrollHeight;
 
-  // build conversation history
   history.push({ role: 'user', content: q });
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
         system: `You are an expert AI educator at a community workshop called LEAP Collective 2026, hosted by the India Society of Worcester. The co-speakers are Rik Banerjee (AI Builder who built EzyUpload.com, the Bazaar Protocol, and a DCF stock analysis platform) and Shrikant Savant (AI Builder & entrepreneur).
 
@@ -1072,7 +1053,6 @@ Your answers are warm, jargon-free, honest, and practical. Keep responses to 3�
     const data = await res.json();
     const answer = data.content?.[0]?.text || 'Something went wrong — please try again.';
 
-    // add to history
     history.push({ role: 'assistant', content: answer });
 
     typingEl.innerHTML = '<div class="msg-label">Workshop AI</div>' +
@@ -1080,7 +1060,7 @@ Your answers are warm, jargon-free, honest, and practical. Keep responses to 3�
 
   } catch(e) {
     typingEl.innerHTML = '<div class="msg-label">Workshop AI</div>Couldn\'t reach the AI right now. That\'s actually a useful lesson — always have a backup plan when tools go offline. Try again in a moment!';
-    history.pop(); // remove failed message
+    history.pop();
   }
 
   btn.disabled = false;
@@ -1089,7 +1069,6 @@ Your answers are warm, jargon-free, honest, and practical. Keep responses to 3�
 
 function ask(q) {
   document.getElementById('qaInput').value = q;
-  // switch to the Q&A tab first
   const qaBtn = document.querySelectorAll('.tab-btn')[2];
   showTab('qa', qaBtn);
   setTimeout(sendQA, 300);
